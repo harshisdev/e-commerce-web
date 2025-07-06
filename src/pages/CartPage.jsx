@@ -28,8 +28,8 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
   const handleRemove = (id) => {
     const updatedCart = cartItems.filter((item) => item.id !== id);
     setCartItems(updatedCart);
-    if (cartItems.length === 1) {
-      onCartUpdate([]);
+    onCartUpdate(updatedCart); // ✅ update header
+    if (updatedCart.length === 0) {
       navigate("/");
     }
   };

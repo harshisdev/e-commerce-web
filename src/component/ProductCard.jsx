@@ -78,8 +78,6 @@ const ProductCard = ({ onAddToCart }) => {
   const handleGoToCart = (productId) => {
     const quantity = productQuantities[productId] || 0;
     const product = filteredProducts.find((p) => p.id === productId);
-    console.log("quantity", quantity);
-    console.log("product", product);
 
     if (quantity > 0 && product) {
       const cartItem = { ...product, quantity };
