@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { MdDeleteOutline } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -28,7 +29,7 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
   const handleRemove = (id) => {
     const updatedCart = cartItems.filter((item) => item.id !== id);
     setCartItems(updatedCart);
-    onCartUpdate(updatedCart); // ✅ update header
+    onCartUpdate(updatedCart);
     if (updatedCart.length === 0) {
       navigate("/");
     }
@@ -71,9 +72,9 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
 
   return (
     <div className="container mt-4">
-      <div className="row">
+      <div className="row mb-4">
         <div className="col">
-          <h2 className="mb-4">🛒 Your Cart</h2>
+          <h2 className="mb-0">🛒 Your Cart</h2>
         </div>
         {cartItems.length > 0 && (
           <div className="col-auto d-flex align-items-center">
@@ -103,7 +104,7 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
             {cartItems.map((item) => (
               <div className="col-12 mb-3" key={item.id}>
                 <div
-                  className={`card p-3 d-flex flex-row align-items-center ${
+                  className={`card p-3 d-flex flex-row  ${
                     item.selected ? "bg-light shadow" : "bg-white"
                   }`}
                 >
@@ -113,33 +114,33 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
                     onChange={() => toggleSelect(item.id)}
                     className="form-check-input opacity-0 w-75 h-100 position-absolute top-0 bottom-0 start-0 "
                   />
-                  <img
-                    src={item.images[0]}
-                    alt={item.title}
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      objectFit: "cover",
-                    }}
-                    className="me-3"
-                  />
+                  <div className="d-flex justify-content-center">
+                    <img
+                      src={item.images[0]}
+                      alt={item.title}
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "cover",
+                      }}
+                      className="me-4 rounded"
+                    />
+                  </div>
                   <div className="flex-grow-1 w-75">
                     <h5>{item.title}</h5>
                     <p>Quantity: {item.quantity}</p>
-                    <p>
+                    <p className="mb-0">
                       Price: ${item.price} x {item.quantity} ={" "}
                       <strong>
                         ${(item.price * item.quantity).toFixed(2)}
                       </strong>
                     </p>
                   </div>
-                  <div>
-                    <button
-                      className="btn btn-outline-danger"
-                      onClick={() => handleRemove(item.id)}
-                    >
-                      Remove
-                    </button>
+                  <div
+                    onClick={() => handleRemove(item.id)}
+                    className="text-danger fs-3"
+                  >
+                    <MdDeleteOutline />
                   </div>
                 </div>
               </div>
@@ -149,8 +150,8 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
             <h4 className="fs-4">Total Quantity: {totalQuantity}</h4>
             <h4 className="fs-4">Total: ${totalPrice.toFixed(2)}</h4>
           </div>
-          <div className="row">
-            <div className="col">
+          <div className="row my-4">
+            <div className="col-auto">
               <Link to="/" className="btn btn-outline-primary">
                 Back To Page
               </Link>

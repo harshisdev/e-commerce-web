@@ -102,11 +102,11 @@ const ProductCard = ({ onAddToCart }) => {
 
   return (
     <div className="container">
-      <div className="row mt-4">
-        <div className="col">
+      <div className="row mt-4 justify-content-between  ">
+        <div className="col-4">
           <h1 className="fs-5">Products</h1>
         </div>
-        <div className="col-3">
+        <div className="col-7 col-md-4">
           <select
             className="form-select"
             value={selectedCategory}
@@ -124,7 +124,7 @@ const ProductCard = ({ onAddToCart }) => {
 
       <div className="row mt-4">
         {filteredProducts.map((product) => (
-          <div className="col-3 mb-4" key={product.id}>
+          <div className="col-12 col-sm-6 col-md-3 col-lg-3 mb-4" key={product.id}>
             <div className="card h-100 position-relative">
               <div className="overflow-hidden">
                 <img
@@ -136,8 +136,6 @@ const ProductCard = ({ onAddToCart }) => {
               <div className="card-body">
                 <h5
                   className="card-title"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
                   title={product.title}
                 >
                   {truncateText(product.title, 25)}

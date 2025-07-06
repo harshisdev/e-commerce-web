@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { productViewiApi } from "../action/productApi";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Slider from "react-slick";
 
 const ProductView = () => {
@@ -33,7 +33,12 @@ const ProductView = () => {
   return (
     <div className="container mt-4">
       <div className="row justify-content-center">
-        <div className="col-4 mb-4">
+        <div className="col-12">
+          <Link to="/" className="btn btn-outline-primary">
+            Back To Page
+          </Link>
+        </div>
+        <div className="col-12 col-md-6 col-lg-4 mb-4">
           <div className="card h-100">
             <div className="carousel-wrapper" data-aos="fade-up">
               <Slider {...settings}>
@@ -49,12 +54,7 @@ const ProductView = () => {
               </Slider>
             </div>
             <div className="card-body mt-2">
-              <h5
-                className="card-title"
-                data-bs-toggle="tooltip"
-                data-bs-placement="top"
-                title={productView?.title}
-              >
+              <h5 className="card-title" title={productView?.title}>
                 {productView?.title}
               </h5>
               <p className="card-text">Price: ${productView?.price}</p>

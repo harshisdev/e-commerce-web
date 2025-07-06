@@ -33,7 +33,7 @@ const Header = ({ cartCount }) => {
     <header className="bg-light">
       <div className="container">
         <div className="row align-items-center justify-content-between py-3">
-          <div className="col-2">E-Coumerce-Web</div>
+          <div className="col-auto">E-Coumerce-Web</div>
           <div className="col-auto d-flex align-items-center">
             {!profileData || !accessToken ? (
               <>
