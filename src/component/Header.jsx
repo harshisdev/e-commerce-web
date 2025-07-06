@@ -9,7 +9,6 @@ const Header = ({ cartCount }) => {
   const [profileData, setprofileData] = useState(null);
   useEffect(() => {
     const loginProfile = async () => {
-      const accessToken = sessionStorage.getItem("accessToken");
       if (!accessToken) return;
 
       try {
@@ -25,6 +24,7 @@ const Header = ({ cartCount }) => {
   }, [accessToken]);
 
   const handleLogout = () => {
+    toast.success("Logout successfully !");
     sessionStorage.clear();
     localStorage.clear();
     navigate("/login");
@@ -35,7 +35,7 @@ const Header = ({ cartCount }) => {
         <div className="row align-items-center justify-content-between py-3">
           <div className="col-2">E-Coumerce-Web</div>
           <div className="col-auto d-flex align-items-center">
-            {!profileData ? (
+            {!profileData || !accessToken ? (
               <>
                 <Link to="/register">Register</Link>
                 <span className="px-2">/</span>
@@ -55,13 +55,13 @@ const Header = ({ cartCount }) => {
                 </span>
               </Link>
             </div>
-            {profileData && (
+            {profileData && accessToken && (
               <div className="ms-2 d-flex align-items-center">
                 <div>{profileData.name}</div>
                 <div class="dropdown">
                   <div
                     style={{ width: "30px", height: "30px", cursor: "pointer" }}
-                    className="ms-2 dropdown-toggle"
+                    className="ms-2"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
@@ -71,14 +71,14 @@ const Header = ({ cartCount }) => {
                       alt={profileData.name}
                     />
                   </div>
-                  <ul class="dropdown-menu">
+                  <ul class="dropdown-menu mt-3 bg-black">
                     <li>
-                      <button
-                        className="btn btn-outline-primary border-0 p-0 ms-2"
+                      <a
+                        className="ms-2 d-block text-white text-decoration-none"
                         onClick={handleLogout}
                       >
                         Logout
-                      </button>
+                      </a>
                     </li>
                   </ul>
                 </div>

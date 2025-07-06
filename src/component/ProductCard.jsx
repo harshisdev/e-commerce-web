@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { productCategoriApi, productListApi } from "../action/productApi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProductCard = ({ onAddToCart }) => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [productQuantities, setProductQuantities] = useState({});
+  const [showGotoCart, setShowGotoCart] = useState({});
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -63,15 +65,42 @@ const ProductCard = ({ onAddToCart }) => {
 
     if (quantity > 0 && product) {
       onAddToCart(product, quantity);
-      setProductQuantities((prev) => ({
+      setShowGotoCart((prev) => ({
         ...prev,
-        [productId]: 0,
+        [productId]: true,
       }));
     }
   };
 
   const truncateText = (text, maxLength) =>
     text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+
+  const handleGoToCart = (productId) => {
+    const quantity = productQuantities[productId] || 0;
+    const product = filteredProducts.find((p) => p.id === productId);
+    console.log("quantity", quantity);
+    console.log("product", product);
+
+    if (quantity > 0 && product) {
+      const cartItem = { ...product, quantity };
+
+      // Retrieve existing cart
+      const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      // Check if the product is already in cart
+      const existingIndex = existingCart.findIndex(
+        (item) => item.id === product.id
+      );
+      if (existingIndex !== -1) {
+        existingCart[existingIndex].quantity += quantity;
+      } else {
+        existingCart.push(cartItem);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(existingCart));
+      navigate("/cart");
+    }
+  };
 
   return (
     <div className="container">
@@ -141,6 +170,14 @@ const ProductCard = ({ onAddToCart }) => {
                   >
                     Add To Cart
                   </button>
+                  {showGotoCart[product.id] && (
+                    <button
+                      className="btn btn-primary btn-sm"
+                      onClick={() => handleGoToCart(product.id)}
+                    >
+                      Go To Cart
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="product-view">

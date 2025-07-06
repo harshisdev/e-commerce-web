@@ -46,6 +46,11 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
     0
   );
 
+  const totalQuantity = cartItems.reduce(
+    (sum, item) => (item.selected ? sum + item.quantity : sum),
+    0
+  );
+
   const toggleSelect = (id) => {
     const updated = cartItems.map((item) =>
       item.id === id ? { ...item, selected: !item.selected } : item
@@ -70,18 +75,20 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
         <div className="col">
           <h2 className="mb-4">🛒 Your Cart</h2>
         </div>
-        <div className="col-auto d-flex align-items-center">
-          <input
-            type="checkbox"
-            checked={allSelected}
-            id="selectAll"
-            onChange={toggleSelectAll}
-            className="form-check-input me-2"
-          />
-          <label htmlFor="selectAll" className="form-check-label">
-            Select All
-          </label>
-        </div>
+        {cartItems.length > 0 && (
+          <div className="col-auto d-flex align-items-center">
+            <input
+              type="checkbox"
+              checked={allSelected}
+              id="selectAll"
+              onChange={toggleSelectAll}
+              className="form-check-input me-2"
+            />
+            <label htmlFor="selectAll" className="form-check-label">
+              Select All
+            </label>
+          </div>
+        )}
       </div>
       {cartItems.length === 0 ? (
         <>
@@ -104,7 +111,7 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
                     type="checkbox"
                     checked={item.selected}
                     onChange={() => toggleSelect(item.id)}
-                    className="form-check-input me-2 opacity-0 w-100 h-100 position-absolute top-0 bottom-0"
+                    className="form-check-input opacity-0 w-75 h-100 position-absolute top-0 bottom-0 start-0 "
                   />
                   <img
                     src={item.images[0]}
@@ -139,6 +146,7 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
             ))}
           </div>
           <div className="text-end mt-2">
+            <h4 className="fs-4">Total Quantity: {totalQuantity}</h4>
             <h4 className="fs-4">Total: ${totalPrice.toFixed(2)}</h4>
           </div>
           <div className="row">
