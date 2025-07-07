@@ -25,7 +25,7 @@ const Login = () => {
         }
       } catch (error) {
         console.error("Login failed:", error);
-        toast.error("Login failed. Check credentials.");
+        toast.error("Oops! Credentials are incorrect.");
       }
     };
 

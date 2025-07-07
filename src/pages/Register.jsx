@@ -22,7 +22,7 @@ const Register = () => {
       try {
         const data = await userRegisterApi(userData);
         toast.success("Registration Successfully!");
-        navigate("/login"); // ✅ redirect after success
+        navigate("/login");
       } catch (error) {
         console.error("Registration failed:", error);
         toast.error("Registration failed. Please try again.");
