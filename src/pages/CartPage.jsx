@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
+import { IoAddOutline } from "react-icons/io5";
+import { MdShoppingCartCheckout } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -23,7 +25,6 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
   }, [initialCartItems]);
 
   const handleShopNow = () => {
-    onCartUpdate([]);
     navigate("/");
   };
 
@@ -101,8 +102,8 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
             </>
           )}
           {cartItems.length === 0 && (
-            <button className="btn btn-outline-primary" onClick={handleShopNow}>
-              Shop Now
+            <button className="btn btn-outline-success" onClick={handleShopNow}>
+              <IoAddOutline className="me-1 fs-5" /> Add Product
             </button>
           )}
         </div>
@@ -175,13 +176,16 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
           </div>
           <div className="row my-4">
             <div className="col-auto">
-              <Link to="/" className="btn btn-outline-primary">
-                + Product
-              </Link>
+              <button
+                className="btn btn-outline-success"
+                onClick={handleShopNow}
+              >
+                <IoAddOutline className="me-1 fs-5" /> Add Product
+              </button>
             </div>
             <div className="col d-flex justify-content-end">
               <button className="btn btn-success" onClick={proceedToCheckout}>
-                Proceed to Checkout
+                <MdShoppingCartCheckout className="me-1 fs-5" /> Checkout
               </button>
             </div>
           </div>
