@@ -102,7 +102,7 @@ const ProductCard = ({ onAddToCart }) => {
   };
 
   return (
-    <div className="container">
+    <div className="container minHeight">
       <div className="row mt-4 justify-content-between  ">
         <div className="col-4">
           <h1 className="fs-5">Products</h1>
@@ -122,7 +122,6 @@ const ProductCard = ({ onAddToCart }) => {
           </select>
         </div>
       </div>
-
       <div className="row mt-4">
         {filteredProducts.map((product) => (
           <div
@@ -189,6 +188,11 @@ const ProductCard = ({ onAddToCart }) => {
             </div>
           </div>
         ))}
+        {filteredProducts?.length === 0 && (
+          <p className="text-center text-warning">
+            Oops! No products available.
+          </p>
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { MdDeleteOutline } from "react-icons/md";
+import { AiOutlineDelete } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -71,11 +71,8 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
   }, [cartItems]);
 
   return (
-    <div
-      className="container mt-4"
-      style={{ minHeight: "calc(100vh - 134px)" }}
-    >
-      <div className="row mb-4">
+    <div className="container minHeight">
+      <div className="row my-4">
         <div className="col">
           <h2 className="mb-0">🛒 Your Cart</h2>
         </div>
@@ -127,7 +124,7 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
                       className="text-danger fs-3 d-flex d-sm-none"
                       style={{ cursor: "pointer" }}
                     >
-                      <MdDeleteOutline />
+                      <AiOutlineDelete />
                     </div>
                   </div>
                   <div className="d-flex justify-content-center">
@@ -157,7 +154,7 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
                     className="text-danger fs-3 align-items-start d-none d-sm-flex"
                     style={{ cursor: "pointer" }}
                   >
-                    <MdDeleteOutline />
+                    <AiOutlineDelete />
                   </div>
                 </div>
               </div>

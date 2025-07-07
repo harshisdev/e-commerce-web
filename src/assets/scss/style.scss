@@ -6,6 +6,9 @@ body {
 * {
   box-sizing: border-box;
 }
+.minHeight {
+  min-height: calc(100vh - 110px);
+}
 .card {
   overflow: hidden;
   img {

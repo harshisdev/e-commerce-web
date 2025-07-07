@@ -38,9 +38,16 @@ const Header = ({ cartCount }) => {
           <div className="col-auto d-flex align-items-center">
             {!profileData || !accessToken ? (
               <>
-                <Link to="/register">Register</Link>
-                <span className="px-2">/</span>
-                <Link to="/login">Login</Link>
+                <Link
+                  to="/register"
+                  className="text-black text-decoration-none"
+                >
+                  Register
+                </Link>
+                <span className="px-2 text-black">/</span>
+                <Link to="/login" className="text-decoration-none text-black">
+                  Login
+                </Link>
               </>
             ) : (
               ""

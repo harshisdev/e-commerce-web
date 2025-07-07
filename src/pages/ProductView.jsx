@@ -32,8 +32,8 @@ const ProductView = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <div className="row justify-content-center position-relative">
+    <div className="container minHeight">
+      <div className="row mt-4 justify-content-center position-relative">
         <Link
           to="/"
           style={{

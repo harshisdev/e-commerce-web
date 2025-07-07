@@ -33,7 +33,7 @@ const Login = () => {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center">
+    <div className="container d-flex justify-content-center align-items-center minHeight">
       <div
         className="card p-4 shadow-lg mt-4"
         style={{ width: "100%", maxWidth: "400px" }}
