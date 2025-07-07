@@ -31,7 +31,7 @@ const Header = ({ cartCount }) => {
     toast.success("Logout successfully !");
     sessionStorage.clear();
     localStorage.clear();
-    navigate("/login");
+    navigate("/");
   };
   return (
     <header className="bg-light position-sticky top-0 z-1">

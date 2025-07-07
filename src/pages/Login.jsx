@@ -26,6 +26,7 @@ const Login = () => {
       } catch (error) {
         console.error("Login failed:", error);
         toast.error("Oops! Credentials are incorrect.");
+        navigate("/register");
       }
     };
 

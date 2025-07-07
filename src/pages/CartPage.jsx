@@ -7,6 +7,7 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState(initialCartItems || []);
   const [allSelected, setAllSelected] = useState(true);
+  const accessToken = sessionStorage.getItem("accessToken");
 
   // Optional: Sync with prop updates (if cartItems are passed from parent and change dynamically)
   useEffect(() => {
@@ -33,13 +34,6 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
     if (updatedCart.length === 0) {
       navigate("/");
     }
-  };
-
-  const proceedToCheckout = () => {
-    toast.success("Order placed successfully!");
-    setCartItems([]);
-    if (onCartUpdate) onCartUpdate([]);
-    navigate("/");
   };
 
   const totalPrice = cartItems.reduce(
@@ -69,6 +63,21 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
     const allChecked = cartItems.every((item) => item.selected);
     setAllSelected(allChecked);
   }, [cartItems]);
+
+  const proceedToCheckout = () => {
+    if (!totalQuantity > 0) {
+      toast.error("Add at least one product.");
+      return;
+    }
+    if (accessToken && totalQuantity > 0) {
+      toast.success("Order placed successfully!");
+      setCartItems([]);
+      if (onCartUpdate) onCartUpdate([]);
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     <div className="container minHeight">
@@ -167,7 +176,7 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
           <div className="row my-4">
             <div className="col-auto">
               <Link to="/" className="btn btn-outline-primary">
-                Add More Items
+                + Product
               </Link>
             </div>
             <div className="col d-flex justify-content-end">
