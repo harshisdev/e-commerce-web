@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { productCategoriApi, productListApi } from "../action/productApi";
 import { Link, useNavigate } from "react-router-dom";
+import { IoEyeOutline } from "react-icons/io5";
 
 const ProductCard = ({ onAddToCart }) => {
   const navigate = useNavigate();
@@ -124,7 +125,10 @@ const ProductCard = ({ onAddToCart }) => {
 
       <div className="row mt-4">
         {filteredProducts.map((product) => (
-          <div className="col-12 col-sm-6 col-md-3 col-lg-3 mb-4" key={product.id}>
+          <div
+            className="col-12 col-md-6 col-lg-4 col-xl-3 mb-4"
+            key={product.id}
+          >
             <div className="card h-100 position-relative">
               <div className="overflow-hidden">
                 <img
@@ -134,10 +138,7 @@ const ProductCard = ({ onAddToCart }) => {
                 />
               </div>
               <div className="card-body">
-                <h5
-                  className="card-title"
-                  title={product.title}
-                >
+                <h5 className="card-title" title={product.title}>
                   {truncateText(product.title, 25)}
                 </h5>
                 <p className="card-text">Price: ${product.price}</p>
@@ -178,9 +179,10 @@ const ProductCard = ({ onAddToCart }) => {
               </div>
               <div className="product-view">
                 <Link
-                  className="btn btn-primary"
+                  className="btn btn-outline-dark"
                   to={`/product-view/${product.id}`}
                 >
+                  <IoEyeOutline className="me-2" />
                   View Product
                 </Link>
               </div>

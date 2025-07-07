@@ -30,7 +30,7 @@ const Header = ({ cartCount }) => {
     navigate("/login");
   };
   return (
-    <header className="bg-light">
+    <header className="bg-light position-sticky top-0 z-1">
       <div className="container">
         <div className="row align-items-center justify-content-between py-3">
           <div className="col-auto">E-Coumerce-Web</div>
@@ -71,7 +71,7 @@ const Header = ({ cartCount }) => {
                       alt={profileData.name}
                     />
                   </div>
-                  <ul class="dropdown-menu mt-3 bg-black">
+                  <ul class="dropdown-menu mt-3 bg-success">
                     <li>
                       <a
                         className="ms-2 d-block text-white text-decoration-none"

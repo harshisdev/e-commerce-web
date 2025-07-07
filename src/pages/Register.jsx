@@ -86,7 +86,7 @@ const Register = () => {
             <select className="form-select" name="role" id="role" required>
               <option value="">Select Role</option>
               <option value="admin">Admin</option>
-              <option value="user">User</option>
+              <option value="customer">Customer</option>
             </select>
           </div>
 

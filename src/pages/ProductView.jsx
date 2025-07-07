@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { productViewiApi } from "../action/productApi";
 import { Link, useParams } from "react-router-dom";
 import Slider from "react-slick";
+import { IoArrowBackCircleOutline } from "react-icons/io5";
 
 const ProductView = () => {
   const { id } = useParams();
@@ -32,12 +33,20 @@ const ProductView = () => {
 
   return (
     <div className="container mt-4">
-      <div className="row justify-content-center">
-        <div className="col-12">
-          <Link to="/" className="btn btn-outline-primary">
-            Back To Page
-          </Link>
-        </div>
+      <div className="row justify-content-center position-relative">
+        <Link
+          to="/"
+          style={{
+            position: "absolute",
+            top: "-20px",
+            left: "0px",
+            textAlign: "end",
+            fontSize: "30px",
+            color: "#000",
+          }}
+        >
+          <IoArrowBackCircleOutline />
+        </Link>
         <div className="col-12 col-md-6 col-lg-4 mb-4">
           <div className="card h-100">
             <div className="carousel-wrapper" data-aos="fade-up">
@@ -58,7 +67,7 @@ const ProductView = () => {
                 {productView?.title}
               </h5>
               <p className="card-text">Price: ${productView?.price}</p>
-              <p>{productView?.description}</p>
+              <p className="mb-0">{productView?.description}</p>
             </div>
           </div>
         </div>

@@ -19,12 +19,16 @@ body {
 
 .product-view {
   position: absolute;
-  top: 0px;
-  right: 0px;
+  top: 10px;
+  right: 10px;
   transition: 0.3s all ease-in;
   opacity: 0;
 }
 .card:hover .product-view {
   opacity: 1;
   transition: 0.3s all ease-in;
+}
+
+.dropdown-menu li a {
+  cursor: pointer;
 }

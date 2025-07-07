@@ -76,44 +76,57 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
         <div className="col">
           <h2 className="mb-0">🛒 Your Cart</h2>
         </div>
-        {cartItems.length > 0 && (
-          <div className="col-auto d-flex align-items-center">
-            <input
-              type="checkbox"
-              checked={allSelected}
-              id="selectAll"
-              onChange={toggleSelectAll}
-              className="form-check-input me-2"
-            />
-            <label htmlFor="selectAll" className="form-check-label">
-              Select All
-            </label>
-          </div>
-        )}
+        <div className="col-auto d-flex align-items-center">
+          {cartItems.length > 0 && (
+            <>
+              <input
+                type="checkbox"
+                checked={allSelected}
+                id="selectAll"
+                onChange={toggleSelectAll}
+                className="form-check-input me-2"
+              />
+              <label htmlFor="selectAll" className="form-check-label">
+                Select All
+              </label>
+            </>
+          )}
+          {cartItems.length === 0 && (
+            <button className="btn btn-outline-primary" onClick={handleShopNow}>
+              Shop Now
+            </button>
+          )}
+        </div>
       </div>
       {cartItems.length === 0 ? (
         <>
-          <p>Your cart is empty.</p>
-          <button className="btn btn-outline-primary" onClick={handleShopNow}>
-            Shop Now
-          </button>
+          <p className="text-center text-danger">Your cart is empty.</p>
         </>
       ) : (
         <>
           <div className="row">
             {cartItems.map((item) => (
-              <div className="col-12 mb-3" key={item.id}>
+              <div className="col-12 mb-4" key={item.id}>
                 <div
-                  className={`card p-3 d-flex flex-row  ${
-                    item.selected ? "bg-light shadow" : "bg-white"
+                  className={`card p-3 d-block d-sm-flex flex-row  ${
+                    item.selected ? "bg-body-secondary shadow" : "bg-white"
                   }`}
                 >
-                  <input
-                    type="checkbox"
-                    checked={item.selected}
-                    onChange={() => toggleSelect(item.id)}
-                    className="form-check-input opacity-0 w-75 h-100 position-absolute top-0 bottom-0 start-0 "
-                  />
+                  <div className="d-flex justify-content-between mb-2 mb-sm-0">
+                    <input
+                      type="checkbox"
+                      checked={item.selected}
+                      onChange={() => toggleSelect(item.id)}
+                      className="form-check-input me-4"
+                    />
+                    <div
+                      onClick={() => handleRemove(item.id)}
+                      className="text-danger fs-3 d-flex d-sm-none"
+                      style={{ cursor: "pointer" }}
+                    >
+                      <MdDeleteOutline />
+                    </div>
+                  </div>
                   <div className="d-flex justify-content-center">
                     <img
                       src={item.images[0]}
@@ -123,13 +136,13 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
                         height: "100px",
                         objectFit: "cover",
                       }}
-                      className="me-4 rounded"
+                      className="me-0 me-sm-4 rounded"
                     />
                   </div>
-                  <div className="flex-grow-1 w-75">
+                  <div className="flex-grow-1 w-sm-75 mt-2 mb-sm-0">
                     <h5>{item.title}</h5>
-                    <p>Quantity: {item.quantity}</p>
-                    <p className="mb-0">
+                    <p className="mb-1 mb-sm-2">Quantity: {item.quantity}</p>
+                    <p className="mb-0 mb-sm-2">
                       Price: ${item.price} x {item.quantity} ={" "}
                       <strong>
                         ${(item.price * item.quantity).toFixed(2)}
@@ -138,7 +151,8 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
                   </div>
                   <div
                     onClick={() => handleRemove(item.id)}
-                    className="text-danger fs-3"
+                    className="text-danger fs-3 align-items-start d-none d-sm-flex"
+                    style={{ cursor: "pointer" }}
                   >
                     <MdDeleteOutline />
                   </div>
@@ -146,14 +160,14 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
               </div>
             ))}
           </div>
-          <div className="text-end mt-2">
-            <h4 className="fs-4">Total Quantity: {totalQuantity}</h4>
-            <h4 className="fs-4">Total: ${totalPrice.toFixed(2)}</h4>
+          <div className="text-end">
+            <h4 className="fs-5">Total Quantity: {totalQuantity}</h4>
+            <h4 className="fs-5">Total: ${totalPrice.toFixed(2)}</h4>
           </div>
           <div className="row my-4">
             <div className="col-auto">
               <Link to="/" className="btn btn-outline-primary">
-                Back To Page
+                Add More Items
               </Link>
             </div>
             <div className="col d-flex justify-content-end">

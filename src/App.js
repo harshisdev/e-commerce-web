@@ -8,6 +8,7 @@ import ProductView from "./pages/ProductView";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { ToastContainer } from "react-toastify";
+import Footer from "./component/Footer";
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
 
@@ -50,6 +51,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </Routes>
+      <Footer />
       <ToastContainer />
     </Router>
   );
