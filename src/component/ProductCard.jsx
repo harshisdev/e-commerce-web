@@ -12,6 +12,8 @@ const ProductCard = ({ onAddToCart }) => {
   const [productQuantities, setProductQuantities] = useState({});
   const [showGotoCart, setShowGotoCart] = useState({});
 
+  const getRole = sessionStorage.getItem("role");
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -108,6 +110,9 @@ const ProductCard = ({ onAddToCart }) => {
           <h1 className="fs-5">Products</h1>
         </div>
         <div className="col-7 col-md-4">
+          {getRole === "admin" && (
+            <button className="btn btn-outline-success">Add Product</button>
+          )}
           <select
             className="form-select"
             value={selectedCategory}

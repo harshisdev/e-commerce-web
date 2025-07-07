@@ -15,6 +15,9 @@ const Header = ({ cartCount }) => {
       try {
         const data = await loginProfileApi(accessToken);
         setprofileData(data);
+        if (data) {
+          sessionStorage.setItem("role", data?.role);
+        }
       } catch (error) {
         console.error("Profile fetch failed:", error);
         toast.error("Failed to load user profile.");
@@ -66,7 +69,7 @@ const Header = ({ cartCount }) => {
             {profileData && accessToken && (
               <div className="ms-2 d-flex align-items-center">
                 <div>{profileData.name}</div>
-                <div class="dropdown">
+                <div className="dropdown">
                   <div
                     style={{ width: "30px", height: "30px", cursor: "pointer" }}
                     className="ms-2"
@@ -79,7 +82,7 @@ const Header = ({ cartCount }) => {
                       alt={profileData.name}
                     />
                   </div>
-                  <ul class="dropdown-menu mt-3 bg-success">
+                  <ul className="dropdown-menu mt-3 bg-success">
                     <li>
                       <a
                         className="ms-2 d-block text-white text-decoration-none"
