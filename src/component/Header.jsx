@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginProfileApi } from "../action/productApi";
 import { toast } from "react-toastify";
+import { MdOutlineLogout } from "react-icons/md";
 
 const Header = ({ cartCount }) => {
   const navigate = useNavigate();
@@ -77,6 +78,7 @@ const Header = ({ cartCount }) => {
                         className="ms-2 d-block text-white text-decoration-none"
                         onClick={handleLogout}
                       >
+                        <MdOutlineLogout className="me-2 fs-5" />
                         Logout
                       </a>
                     </li>

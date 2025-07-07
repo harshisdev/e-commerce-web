@@ -71,7 +71,10 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
   }, [cartItems]);
 
   return (
-    <div className="container mt-4">
+    <div
+      className="container mt-4"
+      style={{ minHeight: "calc(100vh - 134px)" }}
+    >
       <div className="row mb-4">
         <div className="col">
           <h2 className="mb-0">🛒 Your Cart</h2>
@@ -100,7 +103,7 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
       </div>
       {cartItems.length === 0 ? (
         <>
-          <p className="text-center text-danger">Your cart is empty.</p>
+          <p className="text-center text-danger mb-0">Your cart is empty.</p>
         </>
       ) : (
         <>
