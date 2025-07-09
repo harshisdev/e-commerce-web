@@ -5,14 +5,17 @@ import {
   productDeleteApi,
   productCategoriDeleteApi,
   productListUpdateApi,
+  productUpdateApi,
 } from "../action/productApi";
 import { Link, useNavigate } from "react-router-dom";
-import { IoEyeOutline } from "react-icons/io5";
+import { IoAddOutline, IoEyeOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { GrUpdate } from "react-icons/gr";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
-const ProductCard = ({ onAddToCart, show, onClose, onSuccess }) => {
+const ProductCard = ({ onAddToCart }) => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -24,6 +27,9 @@ const ProductCard = ({ onAddToCart, show, onClose, onSuccess }) => {
   const [categoryToDelete, setCategoryToDelete] = useState(null);
   const [relatedProductsCount, setRelatedProductsCount] = useState(0);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showDeleteProductModal, setShowDeleteProductModal] = useState(false);
+  const [showDeleteProductId, setShowDeleteProductId] = useState([]);
+  const [showUpdateProductId, setShowUpdateProductId] = useState("");
 
   const getRole = sessionStorage.getItem("role");
   const accessToken = sessionStorage.getItem("accessToken");
@@ -117,20 +123,28 @@ const ProductCard = ({ onAddToCart, show, onClose, onSuccess }) => {
     }
   };
 
-  const delateProduct = async (productId) => {
-    if (productId) {
+  const delateProductModal = (productId) => {
+    setShowDeleteProductModal(true);
+    setShowDeleteProductId(productId);
+  };
+
+  const delateProduct = async (showDeleteProductId) => {
+    if (showDeleteProductId) {
       try {
-        const data = await productDeleteApi(productId);
+        const data = await productDeleteApi(showDeleteProductId);
         if (data) {
           setProducts((prevProducts) =>
-            prevProducts.filter((product) => product.id !== productId)
+            prevProducts.filter((product) => product.id !== showDeleteProductId)
           );
           setFilteredProducts((prevFiltered) =>
-            prevFiltered.filter((product) => product.id !== productId)
+            prevFiltered.filter((product) => product.id !== showDeleteProductId)
           );
+          setShowDeleteProductModal(false);
+          toast.success("Product is delete.");
         }
       } catch (error) {
         console.error("Failed to delete product:", error);
+        toast.error("Failed to delete product not found");
       }
     }
   };
@@ -177,8 +191,9 @@ const ProductCard = ({ onAddToCart, show, onClose, onSuccess }) => {
     }
   };
   const productUpdateModal = async (productId) => {
+    console.log(productId);
     setShowUpdateModal(true);
-
+    setShowUpdateProductId(productId);
     try {
       const allProducts = await productListApi();
       const product = allProducts.find((p) => p.id === productId);
@@ -215,6 +230,15 @@ const ProductCard = ({ onAddToCart, show, onClose, onSuccess }) => {
     setForm((prev) => ({ ...prev, images: updatedImages }));
   };
 
+  const removeImageField = () => {
+    setForm((prev) => {
+      if (prev.images.length > 1) {
+        return { ...prev, images: prev.images.slice(0, -1) };
+      }
+      return prev;
+    });
+  };
+
   const addImageField = () => {
     setForm((prev) => ({ ...prev, images: [...prev.images, ""] }));
   };
@@ -225,25 +249,16 @@ const ProductCard = ({ onAddToCart, show, onClose, onSuccess }) => {
     const payload = {
       ...form,
       price: Number(form.price),
+      categoryId: 0,
     };
 
+    console.log(payload);
     try {
-      const updatedProduct = await productListUpdateApi(payload, accessToken);
-
-      // Update products state
-      setProducts((prev) =>
-        prev.map((product) =>
-          product.id === updatedProduct.id ? updatedProduct : product
-        )
-      );
-
-      // Update filtered products state
-      setFilteredProducts((prev) =>
-        prev.map((product) =>
-          product.id === updatedProduct.id ? updatedProduct : product
-        )
-      );
-
+      await productUpdateApi({
+        showUpdateProductId,
+        payload,
+        accessToken,
+      });
       setShowUpdateModal(false);
       toast.success("Product updated successfully!");
     } catch (error) {
@@ -354,7 +369,7 @@ const ProductCard = ({ onAddToCart, show, onClose, onSuccess }) => {
                       className="btn btn-outline-secondary btn-sm"
                       onClick={() => handleQuantityChange(product.id, 1)}
                     >
-                      +
+                      <IoAddOutline className="fs-5" />
                     </button>
                   </div>
                   <button
@@ -389,7 +404,7 @@ const ProductCard = ({ onAddToCart, show, onClose, onSuccess }) => {
                 <>
                   <div
                     className="bg-light rounded-pill d-flex align-items-center product-view"
-                    onClick={() => delateProduct(product.id)}
+                    onClick={() => delateProductModal(product.id)}
                   >
                     <AiOutlineDelete className="fs-2 text-danger p-1" />
                   </div>
@@ -412,135 +427,163 @@ const ProductCard = ({ onAddToCart, show, onClose, onSuccess }) => {
         )}
       </div>
 
-      {showDeleteModal && (
-        <div className="modal show d-block" tabIndex="-1" role="dialog">
-          <div className="modal-dialog modal-dialog-centered" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title text-danger">Confirm Deletion</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => setShowDeleteModal(false)}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <p>
-                  Are you sure you want to delete this category?
-                  {relatedProductsCount > 0 && (
-                    <>
-                      <br />
-                      <strong>
-                        {relatedProductsCount} product(s) will also be deleted.
-                      </strong>
-                    </>
-                  )}
-                </p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setShowDeleteModal(false)}
-                >
-                  No
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={confirmDeleteCategory}
-                >
-                  Yes, Delete
-                </button>
-              </div>
-            </div>
+      <Modal
+        show={showDeleteProductModal}
+        onHide={() => setShowDeleteProductModal(false)}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Product</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p className="mb-0">Are you sure you want to delete this Product?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setShowDeleteProductModal(false)}
+          >
+            No
+          </Button>
+          <Button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => delateProduct(showDeleteProductId)}
+          >
+            Yes, Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={showDeleteModal}
+        onHide={() => setShowDeleteModal(false)}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Category</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            Are you sure you want to delete this category?
+            {relatedProductsCount > 0 && (
+              <>
+                <br />
+                <strong>
+                  {relatedProductsCount} product(s) will also be deleted.
+                </strong>
+              </>
+            )}
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setShowDeleteModal(false)}
+          >
+            No
+          </Button>
+          <Button
+            type="button"
+            className="btn btn-danger"
+            onClick={confirmDeleteCategory}
+          >
+            Yes, Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={showUpdateModal}
+        onHide={() => setShowUpdateModal(false)}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Update Product</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="mb-3">
+            <label className="form-label">Title</label>
+            <input
+              type="text"
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              className="form-control"
+              required
+            />
           </div>
-        </div>
-      )}
-      {showUpdateModal && (
-        <div className="modal show d-block" tabIndex="-1">
-          <div className="modal-dialog">
-            <form onSubmit={handleSubmit} className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Create Product</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={onClose}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <div className="mb-3">
-                  <label className="form-label">Title</label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={form.title}
-                    onChange={handleChange}
-                    className="form-control"
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Price</label>
-                  <input
-                    type="number"
-                    name="price"
-                    value={form.price}
-                    onChange={handleChange}
-                    className="form-control"
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Description</label>
-                  <textarea
-                    name="description"
-                    value={form.description}
-                    onChange={handleChange}
-                    className="form-control"
-                    rows="3"
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Images</label>
-                  {form.images.map((img, idx) => (
-                    <input
-                      key={idx}
-                      type="text"
-                      value={img}
-                      onChange={(e) => handleImageChange(e, idx)}
-                      className="form-control mb-2"
-                      placeholder={`Image URL #${idx + 1}`}
-                      required
-                    />
-                  ))}
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-outline-primary"
-                    onClick={addImageField}
-                  >
-                    + Add Image
-                  </button>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setShowUpdateModal(false)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="btn btn-primary">
-                  Save Product
-                </button>
-              </div>
-            </form>
+          <div className="mb-3">
+            <label className="form-label">Price</label>
+            <input
+              type="number"
+              name="price"
+              value={form.price}
+              onChange={handleChange}
+              className="form-control"
+              required
+            />
           </div>
-        </div>
-      )}
+          <div className="mb-3">
+            <label className="form-label">Description</label>
+            <textarea
+              name="description"
+              value={form.description}
+              onChange={handleChange}
+              className="form-control"
+              rows="3"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Images</label>
+            {form.images.map((img, idx) => (
+              <input
+                key={idx}
+                type="text"
+                value={img}
+                onChange={(e) => handleImageChange(e, idx)}
+                className="form-control mb-2"
+                placeholder={`Image URL #${idx + 1}`}
+                required
+              />
+            ))}
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-danger me-4"
+              onClick={removeImageField}
+              disabled={form.images.length <= 1}
+            >
+              <AiOutlineDelete className="me-2 fs-5" />
+              Remove Image
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-success"
+              onClick={addImageField}
+            >
+              <IoAddOutline className="me-2 fs-5" />
+              Add Image
+            </button>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            type="submit"
+            className="btn btn-success"
+            onClick={handleSubmit}
+          >
+            Update Product
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

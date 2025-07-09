@@ -118,20 +118,20 @@ const Header = ({ cartCount }) => {
                         </li>
                         <li className="bg-success border-bottom">
                           <Link
-                            to={"/add-product"}
-                            className="ms-2 d-block py-1 text-white text-decoration-none"
-                          >
-                            <IoAddOutline className="me-2 fs-5" />
-                            Add Product
-                          </Link>
-                        </li>
-                        <li className="bg-success border-bottom">
-                          <Link
                             to={"/add-category"}
                             className="ms-2 d-block py-1 text-white text-decoration-none"
                           >
                             <IoAddOutline className="me-2 fs-5" />
                             Add Category
+                          </Link>
+                        </li>
+                        <li className="bg-success border-bottom">
+                          <Link
+                            to={"/add-product"}
+                            className="ms-2 d-block py-1 text-white text-decoration-none"
+                          >
+                            <IoAddOutline className="me-2 fs-5" />
+                            Add Product
                           </Link>
                         </li>
                       </>

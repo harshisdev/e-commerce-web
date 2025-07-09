@@ -9,6 +9,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { ToastContainer } from "react-toastify";
 import Footer from "./component/Footer";
+import AddCategoryPage from "./pages/AddCategoryPage";
+import AddProductPage from "./pages/AddProductPage";
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
 
@@ -37,6 +39,8 @@ const App = () => {
         cartCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)}
       />
       <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
         <Route
           path="/"
           element={<ProductCard onAddToCart={handleAddToCart} />}
@@ -48,8 +52,8 @@ const App = () => {
           }
         />
         <Route path="/product-view/:id" element={<ProductView />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/add-category" element={<AddCategoryPage />} />
+        <Route path="/add-product" element={<AddProductPage />} />
       </Routes>
       <Footer />
       <ToastContainer />

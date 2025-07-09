@@ -47,6 +47,11 @@ export const productCategoriApi = async () => {
   return response.data;
 };
 
+export const productCategoriUpdateApi = async (formData) => {
+  const response = await axiosClient.post("/categories", formData);
+  return response.data;
+};
+
 export const productCategoriDeleteApi = async (categoriestId) => {
   const response = await axiosClient.delete(`/categories/${categoriestId}`);
   return response.data;
@@ -54,5 +59,22 @@ export const productCategoriDeleteApi = async (categoriestId) => {
 
 export const productViewiApi = async ({ id }) => {
   const response = await axiosClient.get(`/products/${id}`);
+  return response.data;
+};
+
+export const productUpdateApi = async ({
+  showUpdateProductId,
+  updateData,
+  accessToken,
+}) => {
+  const response = await axiosClient.put(
+    `/products/${showUpdateProductId}`,
+    updateData,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
   return response.data;
 };
