@@ -376,26 +376,29 @@ const ProductCard = ({ onAddToCart, show, onClose, onSuccess }) => {
               </div>
               <div
                 className="product-view"
-                style={{ bottom: "140px", top: "unset" }}
+                style={{ bottom: "150px", top: "unset" }}
               >
-                <Link to={`/product-view/${product.id}`}>
-                  <IoEyeOutline className="fs-2 text-white" />
+                <Link
+                  className="bg-light rounded-pill d-flex align-items-center"
+                  to={`/product-view/${product.id}`}
+                >
+                  <IoEyeOutline className="fs-3 text-black" />
                 </Link>
               </div>
               {getRole === "admin" && (
                 <>
                   <div
-                    className="product-view"
+                    className="bg-light rounded-pill d-flex align-items-center product-view"
                     onClick={() => delateProduct(product.id)}
                   >
-                    <AiOutlineDelete className="fs-2 text-danger" />
+                    <AiOutlineDelete className="fs-2 text-danger p-1" />
                   </div>
                   <div
-                    className="product-view"
-                    style={{ left: "10px", right: "unset" }}
+                    className="bg-light rounded-pill d-flex align-items-center product-view"
+                    style={{ left: "20px", right: "unset" }}
                     onClick={() => productUpdateModal(product.id)}
                   >
-                    <GrUpdate className="fs-2 text-success" />
+                    <GrUpdate className="fs-2 text-success p-1" />
                   </div>
                 </>
               )}
