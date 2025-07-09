@@ -38,16 +38,15 @@ const ProductView = () => {
           to="/"
           style={{
             position: "absolute",
-            top: "-20px",
+            top: "-15px",
             left: "0px",
             textAlign: "end",
-            fontSize: "30px",
             color: "#000",
           }}
         >
-          <IoArrowBackCircleOutline />
+          <IoArrowBackCircleOutline className="fs-1" />
         </Link>
-        <div className="col-12 col-md-6 col-lg-4 mb-4">
+        <div className="col-12 col-md-6 col-lg-4 my-4">
           <div className="card h-100">
             <div className="carousel-wrapper" data-aos="fade-up">
               <Slider {...settings}>

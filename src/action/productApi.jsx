@@ -28,9 +28,27 @@ export const productListApi = async () => {
   const response = await axiosClient.get("/products");
   return response.data;
 };
+export const productListUpdateApi = async (productData, accessToken) => {
+  const response = await axiosClient.post("/products", productData, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data;
+};
+
+export const productDeleteApi = async (productId) => {
+  const response = await axiosClient.delete(`/products/${productId}`);
+  return response.data;
+};
 
 export const productCategoriApi = async () => {
   const response = await axiosClient.get("/categories");
+  return response.data;
+};
+
+export const productCategoriDeleteApi = async (categoriestId) => {
+  const response = await axiosClient.delete(`/categories/${categoriestId}`);
   return response.data;
 };
 

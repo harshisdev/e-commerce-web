@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { MdOutlineLogout } from "react-icons/md";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoAddOutline } from "react-icons/io5";
+import { CiUser } from "react-icons/ci";
 
 const Header = ({ cartCount }) => {
   const navigate = useNavigate();
@@ -37,11 +38,17 @@ const Header = ({ cartCount }) => {
     localStorage.clear();
     navigate("/");
   };
+
+  const truncateText = (text, maxLength) =>
+    text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+
   return (
-    <header className="bg-light position-sticky top-0 z-1">
+    <header className="bg-light position-sticky top-0 z-1 shadow">
       <div className="container">
         <div className="row align-items-center justify-content-between py-3">
-          <div className="col-auto">E-Coumerce-Web</div>
+          <div className="col-auto">
+            E-Coumerce-{getRole === "admin" ? "Store" : "Web"}
+          </div>
           <div className="col-auto d-flex align-items-center">
             {!profileData || !accessToken ? (
               <>
@@ -72,8 +79,8 @@ const Header = ({ cartCount }) => {
             </div>
             {profileData && accessToken && (
               <div className="ms-2 d-flex align-items-center">
-                <div>
-                  {profileData.name} (
+                <div className="d-none d-sm-block">
+                  {truncateText(profileData.name, 10)}(
                   <span style={{ textTransform: "capitalize" }}>
                     {profileData.role}
                   </span>
@@ -98,6 +105,16 @@ const Header = ({ cartCount }) => {
                   >
                     {getRole === "admin" && (
                       <>
+                        <li className="bg-success border-bottom d-block d-sm-none py-1 text-white">
+                          <span className="ms-2">
+                            <CiUser className="fs-5 me-1" />{" "}
+                            {truncateText(profileData.name, 7)} (
+                            <span style={{ textTransform: "capitalize" }}>
+                              {profileData.role}
+                            </span>
+                            )
+                          </span>
+                        </li>
                         <li className="bg-success border-bottom">
                           <Link
                             to={"/add-product"}
@@ -109,29 +126,11 @@ const Header = ({ cartCount }) => {
                         </li>
                         <li className="bg-success border-bottom">
                           <Link
-                            to={"/remove-product"}
-                            className="ms-2 d-block py-1 text-white text-decoration-none"
-                          >
-                            <AiOutlineDelete className="me-2 fs-5" />
-                            Remove Product
-                          </Link>
-                        </li>
-                        <li className="bg-success border-bottom">
-                          <Link
                             to={"/add-category"}
                             className="ms-2 d-block py-1 text-white text-decoration-none"
                           >
                             <IoAddOutline className="me-2 fs-5" />
                             Add Category
-                          </Link>
-                        </li>
-                        <li className="bg-success border-bottom">
-                          <Link
-                            to={"/remove-category"}
-                            className="ms-2 d-block py-1 text-white text-decoration-none"
-                          >
-                            <AiOutlineDelete className="me-2 fs-5" />
-                            Remove Category
                           </Link>
                         </li>
                       </>

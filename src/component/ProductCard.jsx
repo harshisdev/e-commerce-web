@@ -1,9 +1,18 @@
 import { useEffect, useState } from "react";
-import { productCategoriApi, productListApi } from "../action/productApi";
+import {
+  productCategoriApi,
+  productListApi,
+  productDeleteApi,
+  productCategoriDeleteApi,
+  productListUpdateApi,
+} from "../action/productApi";
 import { Link, useNavigate } from "react-router-dom";
 import { IoEyeOutline } from "react-icons/io5";
+import { AiOutlineDelete } from "react-icons/ai";
+import { toast } from "react-toastify";
+import { GrUpdate } from "react-icons/gr";
 
-const ProductCard = ({ onAddToCart }) => {
+const ProductCard = ({ onAddToCart, show, onClose, onSuccess }) => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -11,6 +20,13 @@ const ProductCard = ({ onAddToCart }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [productQuantities, setProductQuantities] = useState({});
   const [showGotoCart, setShowGotoCart] = useState({});
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
+  const [relatedProductsCount, setRelatedProductsCount] = useState(0);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+
+  const getRole = sessionStorage.getItem("role");
+  const accessToken = sessionStorage.getItem("accessToken");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -101,26 +117,208 @@ const ProductCard = ({ onAddToCart }) => {
     }
   };
 
+  const delateProduct = async (productId) => {
+    if (productId) {
+      try {
+        const data = await productDeleteApi(productId);
+        if (data) {
+          setProducts((prevProducts) =>
+            prevProducts.filter((product) => product.id !== productId)
+          );
+          setFilteredProducts((prevFiltered) =>
+            prevFiltered.filter((product) => product.id !== productId)
+          );
+        }
+      } catch (error) {
+        console.error("Failed to delete product:", error);
+      }
+    }
+  };
+
+  const prepareDeleteCategory = async (categoryId) => {
+    if (!categoryId) return;
+
+    try {
+      const allProducts = await productListApi();
+      const related = allProducts.filter(
+        (product) => product.category?.id === categoryId
+      );
+
+      setCategoryToDelete(categoryId);
+      setRelatedProductsCount(related.length);
+      setShowDeleteModal(true);
+    } catch (error) {
+      console.error("Error preparing category deletion:", error);
+    }
+  };
+
+  const confirmDeleteCategory = async () => {
+    try {
+      const allProducts = await productListApi();
+      const related = allProducts.filter(
+        (product) => product.category?.id === categoryToDelete
+      );
+
+      for (const product of related) {
+        await productDeleteApi(product.id);
+      }
+
+      await productCategoriDeleteApi(categoryToDelete);
+
+      setCategories((prev) =>
+        prev.filter((cat) => cat.id !== categoryToDelete)
+      );
+      setCategoryToDelete(null);
+      setShowDeleteModal(false);
+      toast.success("Category is delete successfully!");
+    } catch (error) {
+      console.error("Error deleting category:", error);
+      toast.error("Failed to delete category.");
+    }
+  };
+  const productUpdateModal = async (productId) => {
+    setShowUpdateModal(true);
+
+    try {
+      const allProducts = await productListApi();
+      const product = allProducts.find((p) => p.id === productId);
+
+      if (product) {
+        setForm({
+          title: product.title,
+          price: product.price,
+          description: product.description,
+          images: product.images,
+          categoryId: product.category?.id || "",
+        });
+      }
+    } catch (error) {
+      console.error("Error loading product for update:", error);
+    }
+  };
+
+  const [form, setForm] = useState({
+    title: "",
+    price: "",
+    description: "",
+    images: [""],
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e, index) => {
+    const updatedImages = [...form.images];
+    updatedImages[index] = e.target.value;
+    setForm((prev) => ({ ...prev, images: updatedImages }));
+  };
+
+  const addImageField = () => {
+    setForm((prev) => ({ ...prev, images: [...prev.images, ""] }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      ...form,
+      price: Number(form.price),
+    };
+
+    try {
+      const updatedProduct = await productListUpdateApi(payload, accessToken);
+
+      // Update products state
+      setProducts((prev) =>
+        prev.map((product) =>
+          product.id === updatedProduct.id ? updatedProduct : product
+        )
+      );
+
+      // Update filtered products state
+      setFilteredProducts((prev) =>
+        prev.map((product) =>
+          product.id === updatedProduct.id ? updatedProduct : product
+        )
+      );
+
+      setShowUpdateModal(false);
+      toast.success("Product updated successfully!");
+    } catch (error) {
+      console.error("Failed to update product:", error);
+      toast.error("Failed to update product.");
+    }
+  };
+
   return (
     <div className="container minHeight">
-      <div className="row mt-4 justify-content-between  ">
-        <div className="col-4">
+      <div className="row mt-4 justify-content-between">
+        <div className="col-12">
           <h1 className="fs-5">Products</h1>
         </div>
-        <div className="col-7 col-md-4">
+      </div>
+      <div
+        className={`row ${getRole !== "admin" && "justify-content-between"}`}
+      >
+        <div className="col-auto d-flex align-items-center">
+          <label className="fw-bold">Filter Products:</label>
+        </div>
+        <div className={`col-6 ${getRole === "admin" ? "col-md" : "col-md-4"}`}>
           <select
             className="form-select"
             value={selectedCategory}
             onChange={handleCategoryChange}
           >
-            <option value="">Select Category</option>
+            <option value="">All Categories</option>
             {categories.map((category) => (
-              <option value={category.id} key={category.id}>
+              <option key={category.id} value={category.id}>
                 {category.name}
               </option>
             ))}
           </select>
         </div>
+        {getRole === "admin" && (
+          <>
+            <div className="col-auto mt-3 mt-md-0 d-flex align-items-center">
+              <label className="fw-bold">Delete Products:</label>
+            </div>
+            <div
+              className={`col-6 mt-3 mt-md-0 ${
+                getRole === "admin" ? "col-md" : "col-md-4"
+              }`}
+            >
+              <div
+                className="dropdown p-2 border rounded-2 dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style={{ cursor: "pointer" }}
+              >
+                Delete Categories
+                <ul
+                  className="dropdown-menu w-100 overflow-x-hidden"
+                  style={{ height: "400px" }}
+                >
+                  {categories.map((category) => (
+                    <li
+                      className=" px-3 py-2 d-flex justify-content-between align-items-center border-bottom"
+                      key={category.id}
+                    >
+                      {category.name}
+                      <button
+                        className="btn btn-danger p-1 px-2"
+                        onClick={() => prepareDeleteCategory(category.id)}
+                      >
+                        <AiOutlineDelete className="fs-5" />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </>
+        )}
       </div>
       <div className="row mt-4">
         {filteredProducts.map((product) => (
@@ -176,15 +374,31 @@ const ProductCard = ({ onAddToCart }) => {
                   )}
                 </div>
               </div>
-              <div className="product-view">
-                <Link
-                  className="btn btn-outline-dark"
-                  to={`/product-view/${product.id}`}
-                >
-                  <IoEyeOutline className="me-2" />
-                  View Product
+              <div
+                className="product-view"
+                style={{ bottom: "140px", top: "unset" }}
+              >
+                <Link to={`/product-view/${product.id}`}>
+                  <IoEyeOutline className="fs-2 text-white" />
                 </Link>
               </div>
+              {getRole === "admin" && (
+                <>
+                  <div
+                    className="product-view"
+                    onClick={() => delateProduct(product.id)}
+                  >
+                    <AiOutlineDelete className="fs-2 text-danger" />
+                  </div>
+                  <div
+                    className="product-view"
+                    style={{ left: "10px", right: "unset" }}
+                    onClick={() => productUpdateModal(product.id)}
+                  >
+                    <GrUpdate className="fs-2 text-success" />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         ))}
@@ -194,6 +408,136 @@ const ProductCard = ({ onAddToCart }) => {
           </p>
         )}
       </div>
+
+      {showDeleteModal && (
+        <div className="modal show d-block" tabIndex="-1" role="dialog">
+          <div className="modal-dialog modal-dialog-centered" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title text-danger">Confirm Deletion</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowDeleteModal(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>
+                  Are you sure you want to delete this category?
+                  {relatedProductsCount > 0 && (
+                    <>
+                      <br />
+                      <strong>
+                        {relatedProductsCount} product(s) will also be deleted.
+                      </strong>
+                    </>
+                  )}
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowDeleteModal(false)}
+                >
+                  No
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={confirmDeleteCategory}
+                >
+                  Yes, Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {showUpdateModal && (
+        <div className="modal show d-block" tabIndex="-1">
+          <div className="modal-dialog">
+            <form onSubmit={handleSubmit} className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Create Product</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={onClose}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label className="form-label">Title</label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={form.title}
+                    onChange={handleChange}
+                    className="form-control"
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Price</label>
+                  <input
+                    type="number"
+                    name="price"
+                    value={form.price}
+                    onChange={handleChange}
+                    className="form-control"
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Description</label>
+                  <textarea
+                    name="description"
+                    value={form.description}
+                    onChange={handleChange}
+                    className="form-control"
+                    rows="3"
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Images</label>
+                  {form.images.map((img, idx) => (
+                    <input
+                      key={idx}
+                      type="text"
+                      value={img}
+                      onChange={(e) => handleImageChange(e, idx)}
+                      className="form-control mb-2"
+                      placeholder={`Image URL #${idx + 1}`}
+                      required
+                    />
+                  ))}
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-outline-primary"
+                    onClick={addImageField}
+                  >
+                    + Add Image
+                  </button>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowUpdateModal(false)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-primary">
+                  Save Product
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

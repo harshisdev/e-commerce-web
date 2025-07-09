@@ -4,10 +4,10 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="py-2 bg-danger-subtle">
+    <footer className="py-2 bg-black shadow">
       <div className="container">
         <div className="row">
-          <div className="col-12 text-center">
+          <div className="col-12 text-center text-white">
             © {currentYear} E-Commerce-Web. All rights reserved by Harsh Kumar.
           </div>
         </div>

@@ -26,6 +26,7 @@ body {
   right: 10px;
   transition: 0.3s all ease-in;
   opacity: 0;
+  cursor: pointer;
 }
 .card:hover .product-view {
   opacity: 1;
