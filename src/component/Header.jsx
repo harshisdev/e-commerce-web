@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginProfileApi } from "../action/productApi";
 import { toast } from "react-toastify";
 import { MdOutlineLogout } from "react-icons/md";
-import { AiOutlineDelete } from "react-icons/ai";
 import { IoAddOutline } from "react-icons/io5";
 import { CiUser } from "react-icons/ci";
 
@@ -26,6 +25,8 @@ const Header = ({ cartCount }) => {
       } catch (error) {
         console.error("Profile fetch failed:", error);
         toast.error("Failed to load user profile.");
+        sessionStorage.clear();
+        localStorage.clear();
       }
     };
 
