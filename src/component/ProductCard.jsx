@@ -298,7 +298,7 @@ const ProductCard = ({ onAddToCart, show, onClose, onSuccess }) => {
                 Delete Categories
                 <ul
                   className="dropdown-menu w-100 overflow-x-hidden"
-                  style={{ height: "400px" }}
+                  style={{ maxHeight: "400px" }}
                 >
                   {categories.map((category) => (
                     <li
