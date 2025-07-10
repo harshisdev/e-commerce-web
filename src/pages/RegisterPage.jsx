@@ -7,28 +7,55 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 const Register = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const accessToken = sessionStorage.getItem("accessToken");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [loading, setLoading] = useState(false);
+  const token = sessionStorage.getItem("accessToken");
 
-  const handleSubmit = (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
-    const form = new FormData(e.target);
+    if (!email) {
+      toast.error("Email is required.");
+      return;
+    }
+    if (!name) {
+      toast.error("Name is required.");
+      return;
+    }
+    if (!password) {
+      toast.error("Password is required.");
+      return;
+    }
+    if (!role) {
+      toast.error("Role is required.");
+      return;
+    }
+    if (!avatar) {
+      toast.error("Avatar url is required.");
+      return;
+    }
 
-    const userData = {
-      email: form.get("email"),
-      name: form.get("name"),
-      password: form.get("password"),
-      role: form.get("role"),
-      avatar: form.get("avatar"),
-    };
-
+    setLoading(true);
     const registerUser = async () => {
+      const payload = {
+        email: email,
+        name: name,
+        password: password,
+        role: role,
+        avatar: avatar,
+      };
       try {
-        await userRegisterApi(userData);
+        await userRegisterApi(payload);
         toast.success("Registration Successfully!");
         navigate("/login");
       } catch (error) {
         console.error("Registration failed:", error);
         toast.error("Registration failed. Please try again.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -36,10 +63,10 @@ const Register = () => {
   };
 
   useEffect(() => {
-    if (accessToken) {
+    if (token) {
       navigate("/");
     }
-  }, [accessToken]);
+  }, [token]);
 
   return (
     <div className="container d-flex justify-content-center align-items-center minHeight">
@@ -48,7 +75,7 @@ const Register = () => {
         style={{ width: "100%", maxWidth: "400px" }}
       >
         <h4 className="mb-3 text-center">Register</h4>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleRegister}>
           <div className="mb-3">
             <label htmlFor="email" className="form-label">
               Email address
@@ -58,7 +85,8 @@ const Register = () => {
               className="form-control"
               name="email"
               id="email"
-              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -71,7 +99,8 @@ const Register = () => {
               className="form-control"
               name="name"
               id="name"
-              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
 
@@ -84,27 +113,38 @@ const Register = () => {
               className="form-control"
               name="password"
               id="password"
-              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              minLength={5}
+              maxLength={10}
             />
-            <span
-              style={{
-                position: "absolute",
-                top: "38px",
-                right: "15px",
-                cursor: "pointer",
-              }}
-              onClick={() => setShowPassword((prev) => !prev)}
-              tabIndex={-1}
-            >
-              {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
-            </span>
+            {password.length > 0 && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: "38px",
+                  right: "15px",
+                  cursor: "pointer",
+                }}
+                onClick={() => setShowPassword((prev) => !prev)}
+                tabIndex={-1}
+              >
+                {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+              </span>
+            )}
           </div>
 
           <div className="mb-3">
             <label htmlFor="role" className="form-label">
               Role
             </label>
-            <select className="form-select" name="role" id="role" required>
+            <select
+              className="form-select"
+              name="role"
+              id="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            >
               <option value="">Select Role</option>
               <option value="admin">Admin</option>
               <option value="customer">Customer</option>
@@ -120,12 +160,20 @@ const Register = () => {
               className="form-control"
               name="avatar"
               id="avatar"
+              value={avatar}
+              onChange={(e) => setAvatar(e.target.value)}
             />
           </div>
 
-          <button type="submit" className="btn btn-primary w-100">
-            Register
-          </button>
+          <div className="d-flex justify-content-center">
+            <button
+              type="submit"
+              className="btn btn-outline-primary px-3 rounded-5"
+              disabled={loading}
+            >
+              {loading ? "Registering..." : "Register"}
+            </button>
+          </div>
         </form>
       </div>
     </div>

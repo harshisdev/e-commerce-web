@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { MdOutlineLogout } from "react-icons/md";
 import { IoAddOutline } from "react-icons/io5";
 import { CiUser } from "react-icons/ci";
+import defaultUserImg from "../assets/images/default-user.png";
 
 const Header = ({ cartCount }) => {
   const navigate = useNavigate();
@@ -98,7 +99,7 @@ const Header = ({ cartCount }) => {
                   >
                     <img
                       className="rounded-pill img-fluid"
-                      src={profileData.avatar || "/default-avatar.png"}
+                      src={profileData.avatar || { defaultUserImg }}
                       alt={profileData.name}
                     />
                   </div>
@@ -108,7 +109,7 @@ const Header = ({ cartCount }) => {
                   >
                     {getRole === "admin" && (
                       <>
-                        <li className="bg-success border-bottom d-block d-sm-none py-1 text-white">
+                        <li className="bg-success border-bottom d-block d-sm-none py-2 text-white">
                           <span className="ms-2">
                             <CiUser className="fs-5 me-1" />{" "}
                             {truncateText(profileData.name, 7)} (
@@ -121,7 +122,7 @@ const Header = ({ cartCount }) => {
                         <li className="bg-success border-bottom">
                           <Link
                             to={"/add-category"}
-                            className="ms-2 d-block py-1 text-white text-decoration-none"
+                            className="ms-2 d-block py-2 text-white text-decoration-none"
                           >
                             <IoAddOutline className="me-2 fs-5" />
                             Add Category
@@ -130,7 +131,7 @@ const Header = ({ cartCount }) => {
                         <li className="bg-success border-bottom">
                           <Link
                             to={"/add-product"}
-                            className="ms-2 d-block py-1 text-white text-decoration-none"
+                            className="ms-2 d-block py-2 text-white text-decoration-none"
                           >
                             <IoAddOutline className="me-2 fs-5" />
                             Add Product
@@ -138,22 +139,22 @@ const Header = ({ cartCount }) => {
                         </li>
                       </>
                     )}
-                    <li className="bg-success border-bottom py-1 text-white">
+                    <li className="bg-success border-bottom text-white">
                       <Link
                         to={`/update-profile/${profileData.id}`}
-                        className="ms-2 d-block py-1 text-white text-decoration-none"
+                        className="ms-2 d-block py-2 text-white text-decoration-none"
                       >
                         <CiUser className="fs-5 me-1" /> Profile Update
                       </Link>
                     </li>
                     <li className="bg-success">
-                      <a
-                        className="ms-2 d-block py-1 text-white text-decoration-none"
+                      <Link
+                        className="ms-2 d-block py-2 text-white text-decoration-none"
                         onClick={handleLogout}
                       >
                         <MdOutlineLogout className="me-2 fs-5" />
                         Logout
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>

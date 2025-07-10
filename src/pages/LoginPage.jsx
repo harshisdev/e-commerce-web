@@ -1,45 +1,60 @@
 import { toast } from "react-toastify";
 import { loginUserApi } from "../action/productApi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const accessToken = sessionStorage.getItem("accessToken");
+  const [loading, setLoading] = useState(false);
+  const token = sessionStorage.getItem("accessToken");
 
-  const handleSubmit = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    const form = new FormData(e.target);
-
-    const credentials = {
-      email: form.get("email"),
-      password: form.get("password"),
-    };
-
+    if (!email) {
+      toast.error("Email is required.");
+      return;
+    }
+    if (!password) {
+      toast.error("Password is required.");
+      return;
+    }
+    setLoading(true);
     const loginUser = async () => {
+      const payload = {
+        email: email,
+        password: password,
+      };
       try {
-        const data = await loginUserApi(credentials);
-        const token = data.access_token;
-        sessionStorage.setItem("accessToken", token);
-        if (token) {
+        const data = await loginUserApi(payload);
+        if (data && data.access_token) {
+          const token = data.access_token;
+          sessionStorage.setItem("accessToken", token);
           toast.success("Login Successfully!");
           navigate("/");
+        } else {
+          toast.error("Login failed. No token received.");
         }
       } catch (error) {
         console.error("Login failed:", error);
-        toast.error("Oops! Credentials are incorrect.");
+        toast.error("Oops! credentials are incorrect.");
+        setEmail("");
+        setPassword("");
+      } finally {
+        setLoading(false);
       }
     };
 
     loginUser();
   };
   useEffect(() => {
-    if (accessToken) {
+    if (token) {
       navigate("/");
     }
-  }, [accessToken]);
+  }, []);
 
   return (
     <div className="container d-flex justify-content-center align-items-center minHeight">
@@ -48,7 +63,7 @@ const Login = () => {
         style={{ width: "100%", maxWidth: "400px" }}
       >
         <h4 className="mb-3 text-center">Login</h4>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLogin}>
           <div className="mb-3">
             <label htmlFor="email" className="form-label">
               Email address
@@ -58,7 +73,11 @@ const Login = () => {
               className="form-control"
               name="email"
               id="email"
-              required
+              value={email}
+              tabIndex={1}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
             />
           </div>
 
@@ -71,25 +90,57 @@ const Login = () => {
               className="form-control"
               name="password"
               id="password"
-              required
-            />
-            <span
-              style={{
-                position: "absolute",
-                top: "38px",
-                right: "15px",
-                cursor: "pointer",
+              tabIndex={2}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
               }}
-              onClick={() => setShowPassword((prev) => !prev)}
-              tabIndex={-1}
-            >
-              {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
-            </span>
+              minLength={5}
+              maxLength={10}
+            />
+            {password.length > 0 && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: "38px",
+                  right: "15px",
+                  cursor: "pointer",
+                }}
+                onClick={() => setShowPassword((prev) => !prev)}
+                tabIndex={-1}
+              >
+                {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+              </span>
+            )}
           </div>
 
-          <button type="submit" className="btn btn-primary w-100">
-            Login
-          </button>
+          <div className="d-flex justify-content-center">
+            <button
+              type="submit"
+              className="btn btn-outline-primary px-3 rounded-5 d-flex align-items-center gap-2"
+              disabled={loading}
+              tabIndex={3}
+            >
+              {loading ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Logging in...
+                </>
+              ) : (
+                "Login"
+              )}
+            </button>
+          </div>
+          <div className="text-center mt-3">
+            <span>Don't have an account? </span>
+            <Link to="/register" className="text-danger">
+              Register here
+            </Link>
+          </div>
         </form>
       </div>
     </div>
