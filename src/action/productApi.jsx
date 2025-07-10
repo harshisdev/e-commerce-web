@@ -64,12 +64,14 @@ export const productViewiApi = async ({ id }) => {
 
 export const productUpdateApi = async ({
   showUpdateProductId,
-  updateData,
+  payload,
   accessToken,
 }) => {
+  console.log("updateData", payload);
+
   const response = await axiosClient.put(
     `/products/${showUpdateProductId}`,
-    updateData,
+    payload,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -77,4 +79,19 @@ export const productUpdateApi = async ({
     }
   );
   return response.data;
+};
+
+export const uploadImageApi = async (formData) => {
+  const res = await axiosClient.post("/files/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return res.data;
+};
+
+export const getImageApi = async (fileName) => {
+  const res = await axiosClient.get(`/files/${fileName}`);
+  return res.data;
 };

@@ -249,10 +249,8 @@ const ProductCard = ({ onAddToCart }) => {
     const payload = {
       ...form,
       price: Number(form.price),
-      categoryId: 0,
+      categoryId: form.categoryId,
     };
-
-    console.log(payload);
     try {
       await productUpdateApi({
         showUpdateProductId,
@@ -261,6 +259,12 @@ const ProductCard = ({ onAddToCart }) => {
       });
       setShowUpdateModal(false);
       toast.success("Product updated successfully!");
+      setProducts((prev) =>
+        prev.map((p) => (p.id === showUpdateProductId ? { ...p, ...form } : p))
+      );
+      setFilteredProducts((prev) =>
+        prev.map((p) => (p.id === showUpdateProductId ? { ...p, ...form } : p))
+      );
     } catch (error) {
       console.error("Failed to update product:", error);
       toast.error("Failed to update product.");
@@ -469,7 +473,7 @@ const ProductCard = ({ onAddToCart }) => {
           <Modal.Title>Delete Category</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>
+          <p className="mb-0">
             Are you sure you want to delete this category?
             {relatedProductsCount > 0 && (
               <>

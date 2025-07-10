@@ -1,7 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoAddOutline } from "react-icons/io5";
-import { productCategoriApi, productListUpdateApi } from "../action/productApi";
+import {
+  getImageApi,
+  productCategoriApi,
+  productListUpdateApi,
+  uploadImageApi,
+} from "../action/productApi";
 import { toast } from "react-toastify";
 import { Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -9,12 +14,14 @@ import { Link } from "react-router-dom";
 const AddProductPage = () => {
   const [categories, setCategories] = useState([]);
   const [showViewProduct, setShowViewProduct] = useState(false);
+  const fileInputRef = useRef(null);
+  const [urlUpdate, setUrlUpdate] = useState([]);
   const [form, setForm] = useState({
     title: "",
     price: "",
     description: "",
     categoryId: "",
-    images: [""],
+    images: [],
   });
 
   const [loading, setLoading] = useState(false);
@@ -37,6 +44,38 @@ const AddProductPage = () => {
     if (form.images.length > 1) {
       const updatedImages = form.images.slice(0, -1);
       setForm({ ...form, images: updatedImages });
+    }
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Only JPG and PNG images are allowed.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const uploadRes = await uploadImageApi(formData);
+      const imageUrl = uploadRes.location;
+      setUrlUpdate(imageUrl);
+
+      setForm((prev) => ({
+        ...prev,
+        images: [...prev.images, imageUrl],
+      }));
+      toast.success("Image uploaded successfully!");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      toast.error("Image upload failed");
     }
   };
 
@@ -143,6 +182,7 @@ const AddProductPage = () => {
 
             <div className="mb-3">
               <label className="form-label">Images</label>
+              <br />
               {form.images.map((img, idx) => (
                 <input
                   key={idx}
@@ -154,6 +194,7 @@ const AddProductPage = () => {
                   required
                 />
               ))}
+
               <button
                 type="button"
                 className="btn btn-sm btn-outline-danger me-4 mt-2"
@@ -161,7 +202,7 @@ const AddProductPage = () => {
                 disabled={form.images.length <= 1}
               >
                 <AiOutlineDelete className="me-2 fs-5" />
-                Remove Image
+                Remove URL
               </button>
               <button
                 type="button"
@@ -169,10 +210,18 @@ const AddProductPage = () => {
                 onClick={addImageField}
               >
                 <IoAddOutline className="me-2 fs-5" />
-                Add Image
+                Add URL
               </button>
             </div>
-
+            <div className="mb-3">
+              <input
+                type="file"
+                className="form-control"
+                accept="image/png, image/jpeg"
+                onChange={handleFileChange}
+                ref={fileInputRef}
+              />
+            </div>
             <div className="d-flex justify-content-center">
               <button
                 type="submit"

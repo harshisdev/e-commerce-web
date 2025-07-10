@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { productCategoriUpdateApi } from "../action/productApi";
+import { productCategoriUpdateApi, uploadImageApi } from "../action/productApi";
 import { toast } from "react-toastify";
 import { Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -16,6 +16,32 @@ const AddCategoryPage = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Only JPG and PNG images are allowed.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await uploadImageApi(formData);
+      const imageUrl = res.location;
+
+      setFormData((prev) => ({ ...prev, image: imageUrl }));
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      toast.error("Image upload failed");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -30,12 +56,13 @@ const AddCategoryPage = () => {
   };
 
   return (
-    <div className="container minHeight d-flex justify-content-center align-items-center">
+    <div className="container minHeight">
+      <h2 className="my-4 fs-5">Add New Category</h2>
       <div className="row justify-content-center w-100">
         <div className="col-12 col-sm-6">
           <form onSubmit={handleSubmit} className="p-4 border rounded w-96">
             <div className="mb-3">
-              <label>Name</label>
+              <label className="mb-1">Name</label>
               <input
                 type="text"
                 name="name"
@@ -47,14 +74,24 @@ const AddCategoryPage = () => {
             </div>
 
             <div className="mb-3">
-              <label>Image URL</label>
+              <div className="mb-3">
+                <label className="mb-1">Image URL</label>
+                <input
+                  type="text"
+                  name="image"
+                  className="form-control"
+                  value={formData.image}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+            <div className="mb-3">
               <input
-                type="text"
-                name="image"
+                type="file"
                 className="form-control"
-                value={formData.image}
-                onChange={handleChange}
-                required
+                accept="image/png, image/jpeg"
+                onChange={handleFileChange}
               />
             </div>
 
