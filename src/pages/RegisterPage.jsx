@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { userRegisterApi } from "../action/productApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ const Register = () => {
 
     const registerUser = async () => {
       try {
-        const data = await userRegisterApi(userData);
+        await userRegisterApi(userData);
         toast.success("Registration Successfully!");
         navigate("/login");
       } catch (error) {

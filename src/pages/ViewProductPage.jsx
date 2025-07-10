@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { productViewiApi } from "../action/productApi";
 import { Link, useParams } from "react-router-dom";
 import Slider from "react-slick";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 
-const ProductView = () => {
+const ViewProductPage = () => {
   const { id } = useParams();
   const [productView, setProductView] = useState();
 
@@ -22,7 +22,6 @@ const ProductView = () => {
   }, [id]);
 
   const settings = {
-    dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -87,4 +86,4 @@ const ProductView = () => {
   );
 };
 
-export default ProductView;
+export default ViewProductPage;

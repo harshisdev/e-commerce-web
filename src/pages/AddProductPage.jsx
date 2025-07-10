@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoAddOutline } from "react-icons/io5";
 import {
-  getImageApi,
   productCategoriApi,
   productListUpdateApi,
   uploadImageApi,
@@ -15,7 +14,6 @@ const AddProductPage = () => {
   const [categories, setCategories] = useState([]);
   const [showViewProduct, setShowViewProduct] = useState(false);
   const fileInputRef = useRef(null);
-  const [urlUpdate, setUrlUpdate] = useState([]);
   const [form, setForm] = useState({
     title: "",
     price: "",
@@ -65,7 +63,6 @@ const AddProductPage = () => {
     try {
       const uploadRes = await uploadImageApi(formData);
       const imageUrl = uploadRes.location;
-      setUrlUpdate(imageUrl);
 
       setForm((prev) => ({
         ...prev,
@@ -122,11 +119,11 @@ const AddProductPage = () => {
     fetchCategories();
   }, []);
 
-   useEffect(() => {
-     if (!accessToken && getRole !== "Admin") {
-       navigate("/");
-     }
-   }, [!accessToken, getRole !== "Admin"]);
+  useEffect(() => {
+    if (!accessToken && getRole !== "Admin") {
+      navigate("/");
+    }
+  }, [!accessToken, getRole !== "Admin"]);
 
   return (
     <div className="container mb-4">

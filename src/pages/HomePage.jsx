@@ -416,13 +416,30 @@ const ProductCard = ({ onAddToCart }) => {
             className="col-12 col-md-6 col-lg-4 col-xl-3 mb-4"
             key={product.id}
           >
-            <div className="card h-100 position-relative">
-              <div className="overflow-hidden">
+            <div className="card h-100">
+              <div
+                className="overflow-hidden position-relative"
+                style={{ maxHeight: "355px" }}
+              >
                 <img
-                  className="card-img-top"
+                  className="card-img-top img-fluid"
                   src={product.images[0]}
                   alt={product.title}
                 />
+                <div
+                  className="product-view"
+                  style={{
+                    bottom: "15px",
+                    top: "unset",
+                  }}
+                >
+                  <Link
+                    className="bg-light rounded-pill d-flex align-items-center"
+                    to={`/product-view/${product.id}`}
+                  >
+                    <IoEyeOutline className="fs-3 text-black" />
+                  </Link>
+                </div>
               </div>
               <div className="card-body">
                 <h5 className="card-title" title={product.title}>
@@ -469,20 +486,6 @@ const ProductCard = ({ onAddToCart }) => {
                     </>
                   )}
                 </div>
-              </div>
-              <div
-                className="product-view"
-                style={{
-                  bottom: getRole === "admin" ? "105px" : "150px",
-                  top: "unset",
-                }}
-              >
-                <Link
-                  className="bg-light rounded-pill d-flex align-items-center"
-                  to={`/product-view/${product.id}`}
-                >
-                  <IoEyeOutline className="fs-3 text-black" />
-                </Link>
               </div>
               {getRole === "admin" && (
                 <>
