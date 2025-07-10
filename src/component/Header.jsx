@@ -138,6 +138,14 @@ const Header = ({ cartCount }) => {
                         </li>
                       </>
                     )}
+                    <li className="bg-success border-bottom py-1 text-white">
+                      <Link
+                        to={`/update-profile/${profileData.id}`}
+                        className="ms-2 d-block py-1 text-white text-decoration-none"
+                      >
+                        <CiUser className="fs-5 me-1" /> Profile Update
+                      </Link>
+                    </li>
                     <li className="bg-success">
                       <a
                         className="ms-2 d-block py-1 text-white text-decoration-none"

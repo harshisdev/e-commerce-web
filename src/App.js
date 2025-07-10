@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import Footer from "./component/Footer";
 import AddCategoryPage from "./pages/AddCategoryPage";
 import AddProductPage from "./pages/AddProductPage";
+import UpdateProfile from "./pages/UpdateProfile";
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
 
@@ -41,6 +42,7 @@ const App = () => {
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/update-profile/:id" element={<UpdateProfile />} />
         <Route
           path="/"
           element={<ProductCard onAddToCart={handleAddToCart} />}

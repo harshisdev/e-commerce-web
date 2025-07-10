@@ -1,10 +1,12 @@
 import { toast } from "react-toastify";
 import { loginUserApi } from "../action/productApi";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const accessToken = sessionStorage.getItem("accessToken");
 
   const handleSubmit = (e) => {
@@ -61,17 +63,29 @@ const Login = () => {
             />
           </div>
 
-          <div className="mb-3">
+          <div className="mb-3 position-relative">
             <label htmlFor="password" className="form-label">
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               className="form-control"
               name="password"
               id="password"
               required
             />
+            <span
+              style={{
+                position: "absolute",
+                top: "38px",
+                right: "15px",
+                cursor: "pointer",
+              }}
+              onClick={() => setShowPassword((prev) => !prev)}
+              tabIndex={-1}
+            >
+              {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+            </span>
           </div>
 
           <button type="submit" className="btn btn-primary w-100">
