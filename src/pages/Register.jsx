@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { userRegisterApi } from "../action/productApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const navigate = useNavigate();
+  const accessToken = sessionStorage.getItem("accessToken");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -31,6 +32,12 @@ const Register = () => {
 
     registerUser();
   };
+
+  useEffect(() => {
+    if (accessToken) {
+      navigate("/");
+    }
+  }, [accessToken]);
 
   return (
     <div className="container d-flex justify-content-center align-items-center minHeight">

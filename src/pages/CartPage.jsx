@@ -10,6 +10,7 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
   const [cartItems, setCartItems] = useState(initialCartItems || []);
   const [allSelected, setAllSelected] = useState(true);
   const accessToken = sessionStorage.getItem("accessToken");
+  const getRole = sessionStorage.getItem("role");
 
   // Optional: Sync with prop updates (if cartItems are passed from parent and change dynamically)
   useEffect(() => {
@@ -79,6 +80,11 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
       navigate("/login");
     }
   };
+  useEffect(() => {
+    if (getRole === "admin") {
+      navigate("/");
+    }
+  }, [accessToken]);
 
   return (
     <div className="container minHeight">

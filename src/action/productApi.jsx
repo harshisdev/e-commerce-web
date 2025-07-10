@@ -67,8 +67,6 @@ export const productUpdateApi = async ({
   payload,
   accessToken,
 }) => {
-  console.log("updateData", payload);
-
   const response = await axiosClient.put(
     `/products/${showUpdateProductId}`,
     payload,
@@ -91,7 +89,19 @@ export const uploadImageApi = async (formData) => {
   return res.data;
 };
 
-export const getImageApi = async (fileName) => {
-  const res = await axiosClient.get(`/files/${fileName}`);
-  return res.data;
+export const categorytUpdateApi = async ({
+  categoryToUpdate,
+  payload,
+  accessToken,
+}) => {
+  const response = await axiosClient.put(
+    `/categories/${categoryToUpdate}`,
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  return response.data;
 };

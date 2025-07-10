@@ -9,7 +9,7 @@ import {
 } from "../action/productApi";
 import { toast } from "react-toastify";
 import { Button, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AddProductPage = () => {
   const [categories, setCategories] = useState([]);
@@ -23,8 +23,10 @@ const AddProductPage = () => {
     categoryId: "",
     images: [],
   });
-
   const [loading, setLoading] = useState(false);
+  const accessToken = sessionStorage.getItem("accessToken");
+  const getRole = sessionStorage.getItem("role");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -119,6 +121,12 @@ const AddProductPage = () => {
 
     fetchCategories();
   }, []);
+
+   useEffect(() => {
+     if (!accessToken && getRole !== "Admin") {
+       navigate("/");
+     }
+   }, [!accessToken, getRole !== "Admin"]);
 
   return (
     <div className="container mb-4">

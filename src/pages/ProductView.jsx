@@ -29,6 +29,8 @@ const ProductView = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
+    arrows: productView?.images?.length > 1,
+    dots: productView?.images?.length > 1,
   };
 
   return (
@@ -49,17 +51,27 @@ const ProductView = () => {
         <div className="col-12 col-md-6 col-lg-4 my-4">
           <div className="card h-100">
             <div className="carousel-wrapper" data-aos="fade-up">
-              <Slider {...settings}>
-                {productView?.images.map((img, index) => (
-                  <div key={index} className="overflow-hidden">
-                    <img
-                      src={img}
-                      alt={productView?.title}
-                      style={{ width: "100%" }}
-                    />
-                  </div>
-                ))}
-              </Slider>
+              {productView?.images?.length > 1 ? (
+                <Slider {...settings}>
+                  {productView.images.map((img, index) => (
+                    <div key={index} className="overflow-hidden">
+                      <img
+                        src={img}
+                        alt={productView?.title}
+                        style={{ width: "100%" }}
+                      />
+                    </div>
+                  ))}
+                </Slider>
+              ) : (
+                <div className="overflow-hidden">
+                  <img
+                    src={productView?.images?.[0]}
+                    alt={productView?.title}
+                    style={{ width: "100%" }}
+                  />
+                </div>
+              )}
             </div>
             <div className="card-body mt-2">
               <h5 className="card-title" title={productView?.title}>

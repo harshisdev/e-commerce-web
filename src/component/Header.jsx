@@ -44,7 +44,7 @@ const Header = ({ cartCount }) => {
     text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 
   return (
-    <header className="bg-light position-sticky top-0 z-1 shadow">
+    <header className="bg-light position-sticky top-0 z-2 shadow">
       <div className="container">
         <div className="row align-items-center justify-content-between py-3">
           <div className="col-auto">
@@ -67,17 +67,19 @@ const Header = ({ cartCount }) => {
             ) : (
               ""
             )}
-            <div>
-              <Link
-                to="/cart"
-                className="btn btn-btn-outline-primary position-relative ms-3 p-0 border-0"
-              >
-                <span className="fs-4"> 🛒</span>
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  {cartCount > 0 ? cartCount : ""}
-                </span>
-              </Link>
-            </div>
+            {getRole !== "admin" && (
+              <div>
+                <Link
+                  to="/cart"
+                  className="btn btn-btn-outline-primary position-relative ms-3 p-0 border-0"
+                >
+                  <span className="fs-4"> 🛒</span>
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {cartCount > 0 ? cartCount : ""}
+                  </span>
+                </Link>
+              </div>
+            )}
             {profileData && accessToken && (
               <div className="ms-2 d-flex align-items-center">
                 <div className="d-none d-sm-block">

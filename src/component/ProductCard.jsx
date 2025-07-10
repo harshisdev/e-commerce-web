@@ -4,8 +4,9 @@ import {
   productListApi,
   productDeleteApi,
   productCategoriDeleteApi,
-  productListUpdateApi,
   productUpdateApi,
+  categorytUpdateApi,
+  uploadImageApi,
 } from "../action/productApi";
 import { Link, useNavigate } from "react-router-dom";
 import { IoAddOutline, IoEyeOutline } from "react-icons/io5";
@@ -30,6 +31,13 @@ const ProductCard = ({ onAddToCart }) => {
   const [showDeleteProductModal, setShowDeleteProductModal] = useState(false);
   const [showDeleteProductId, setShowDeleteProductId] = useState([]);
   const [showUpdateProductId, setShowUpdateProductId] = useState("");
+  const [showUpdateCategoryModal, setshowUpdateCategoryModal] = useState(false);
+  const [categoryToUpdate, setCategoryToUpdate] = useState(null);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    image: "",
+  });
 
   const getRole = sessionStorage.getItem("role");
   const accessToken = sessionStorage.getItem("accessToken");
@@ -191,7 +199,6 @@ const ProductCard = ({ onAddToCart }) => {
     }
   };
   const productUpdateModal = async (productId) => {
-    console.log(productId);
     setShowUpdateModal(true);
     setShowUpdateProductId(productId);
     try {
@@ -203,7 +210,7 @@ const ProductCard = ({ onAddToCart }) => {
           title: product.title,
           price: product.price,
           description: product.description,
-          images: product.images,
+          images: [...product.images],
           categoryId: product.category?.id || "",
         });
       }
@@ -271,6 +278,62 @@ const ProductCard = ({ onAddToCart }) => {
     }
   };
 
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Only JPG and PNG images are allowed.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await uploadImageApi(formData);
+      const imageUrl = res.location;
+
+      setFormData((prev) => ({ ...prev, image: imageUrl }));
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      toast.error("Image upload failed");
+    }
+  };
+
+  const confirmUpdateCategoryModal = (categoryId) => {
+    setshowUpdateCategoryModal(true);
+    setCategoryToUpdate(categoryId);
+  };
+
+  const confirmUpdateCategory = async () => {
+    if (!categoryToUpdate) return;
+
+    try {
+      const payload = {
+        name: formData.name,
+        image: formData.image,
+      };
+      await categorytUpdateApi({ categoryToUpdate, payload, accessToken });
+
+      // Update the categories list in state
+      setCategories((prev) =>
+        prev.map((cat) =>
+          cat.id === categoryToUpdate ? { ...cat, ...payload } : cat
+        )
+      );
+
+      setshowUpdateCategoryModal(false);
+      toast.success("Category updated successfully!");
+    } catch (error) {
+      console.error("Error updating category:", error);
+      toast.error("Failed to update category.");
+    }
+  };
+
   return (
     <div className="container minHeight">
       <div className="row mt-4 justify-content-between">
@@ -281,10 +344,12 @@ const ProductCard = ({ onAddToCart }) => {
       <div
         className={`row ${getRole !== "admin" && "justify-content-between"}`}
       >
-        <div className="col-auto d-flex align-items-center">
+        <div className="col-auto d-none d-lg-flex align-items-center">
           <label className="fw-bold">Filter Products:</label>
         </div>
-        <div className={`col-6 ${getRole === "admin" ? "col-md" : "col-md-4"}`}>
+        <div
+          className={`col-12 ${getRole === "admin" ? "col-md" : "col-lg-4"}`}
+        >
           <select
             className="form-select"
             value={selectedCategory}
@@ -300,11 +365,11 @@ const ProductCard = ({ onAddToCart }) => {
         </div>
         {getRole === "admin" && (
           <>
-            <div className="col-auto mt-3 mt-md-0 d-flex align-items-center">
-              <label className="fw-bold">Delete Products:</label>
+            <div className="col-auto mt-3 mt-md-0 d-none d-lg-flex align-items-center">
+              <label className="fw-bold">Update & Delete Products:</label>
             </div>
             <div
-              className={`col-6 mt-3 mt-md-0 ${
+              className={`col-12 mt-3 mt-md-0 ${
                 getRole === "admin" ? "col-md" : "col-md-4"
               }`}
             >
@@ -314,9 +379,9 @@ const ProductCard = ({ onAddToCart }) => {
                 aria-expanded="false"
                 style={{ cursor: "pointer" }}
               >
-                Delete Categories
+                Categories Update & Delete
                 <ul
-                  className="dropdown-menu w-100 overflow-x-hidden"
+                  className="dropdown-menu w-100 overflow-x-hidden z-1 p-0"
                   style={{ maxHeight: "400px" }}
                 >
                   {categories.map((category) => (
@@ -324,7 +389,13 @@ const ProductCard = ({ onAddToCart }) => {
                       className=" px-3 py-2 d-flex justify-content-between align-items-center border-bottom"
                       key={category.id}
                     >
-                      {category.name}
+                      <span className="w-75">{category.name}</span>
+                      <button
+                        className="btn btn-success p-1 px-2"
+                        onClick={() => confirmUpdateCategoryModal(category.id)}
+                      >
+                        <GrUpdate className="fs-5" />
+                      </button>
                       <button
                         className="btn btn-danger p-1 px-2"
                         onClick={() => prepareDeleteCategory(category.id)}
@@ -357,45 +428,54 @@ const ProductCard = ({ onAddToCart }) => {
                 <h5 className="card-title" title={product.title}>
                   {truncateText(product.title, 25)}
                 </h5>
-                <p className="card-text">Price: ${product.price}</p>
+                <p className={`card-text ${getRole === "admin" && "mb-0"}`}>
+                  Price: ${product.price}
+                </p>
                 <div className="d-flex justify-content-between align-items-center">
-                  <div className="btn-group border">
-                    <button
-                      className="btn btn-outline-secondary btn-sm"
-                      onClick={() => handleQuantityChange(product.id, -1)}
-                    >
-                      -
-                    </button>
-                    <span className="mx-2">
-                      {productQuantities[product.id] || 0}
-                    </span>
-                    <button
-                      className="btn btn-outline-secondary btn-sm"
-                      onClick={() => handleQuantityChange(product.id, 1)}
-                    >
-                      <IoAddOutline className="fs-5" />
-                    </button>
-                  </div>
-                  <button
-                    className="btn btn-primary btn-sm"
-                    onClick={() => handleAddToCart(product.id)}
-                    disabled={!(productQuantities[product.id] > 0)}
-                  >
-                    Add To Cart
-                  </button>
-                  {showGotoCart[product.id] && (
-                    <button
-                      className="btn btn-primary btn-sm"
-                      onClick={() => handleGoToCart(product.id)}
-                    >
-                      Go To Cart
-                    </button>
+                  {getRole !== "admin" && (
+                    <>
+                      <div className="btn-group border">
+                        <button
+                          className="btn btn-outline-secondary btn-sm"
+                          onClick={() => handleQuantityChange(product.id, -1)}
+                        >
+                          -
+                        </button>
+                        <span className="mx-2">
+                          {productQuantities[product.id] || 0}
+                        </span>
+                        <button
+                          className="btn btn-outline-secondary btn-sm"
+                          onClick={() => handleQuantityChange(product.id, 1)}
+                        >
+                          <IoAddOutline className="fs-5" />
+                        </button>
+                      </div>
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => handleAddToCart(product.id)}
+                        disabled={!(productQuantities[product.id] > 0)}
+                      >
+                        Add To Cart
+                      </button>
+                      {showGotoCart[product.id] && (
+                        <button
+                          className="btn btn-primary btn-sm"
+                          onClick={() => handleGoToCart(product.id)}
+                        >
+                          Go To Cart
+                        </button>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
               <div
                 className="product-view"
-                style={{ bottom: "150px", top: "unset" }}
+                style={{
+                  bottom: getRole === "admin" ? "105px" : "150px",
+                  top: "unset",
+                }}
               >
                 <Link
                   className="bg-light rounded-pill d-flex align-items-center"
@@ -460,6 +540,74 @@ const ProductCard = ({ onAddToCart }) => {
             Yes, Delete
           </Button>
         </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={showUpdateCategoryModal}
+        onHide={() => setshowUpdateCategoryModal(false)}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Update Category</Modal.Title>
+        </Modal.Header>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            confirmUpdateCategory();
+          }}
+        >
+          <Modal.Body>
+            <div className="mb-3">
+              <label className="mb-1">Name</label>
+              <input
+                type="text"
+                name="name"
+                className="form-control"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label className="mb-1">Image URL</label>
+              <input
+                type="text"
+                name="image"
+                className="form-control"
+                value={formData.image}
+                onChange={(e) =>
+                  setFormData({ ...formData, image: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label className="mb-1">Or Upload Image</label>
+              <input
+                type="file"
+                className="form-control"
+                accept="image/png, image/jpeg"
+                onChange={handleFileChange}
+              />
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setshowUpdateCategoryModal(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" className="btn btn-primary">
+              Update Category
+            </Button>
+          </Modal.Footer>
+        </form>
       </Modal>
 
       <Modal

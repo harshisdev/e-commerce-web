@@ -1,9 +1,11 @@
 import { toast } from "react-toastify";
 import { loginUserApi } from "../action/productApi";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
+  const accessToken = sessionStorage.getItem("accessToken");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,6 +34,11 @@ const Login = () => {
 
     loginUser();
   };
+  useEffect(() => {
+    if (accessToken) {
+      navigate("/");
+    }
+  }, [accessToken]);
 
   return (
     <div className="container d-flex justify-content-center align-items-center minHeight">

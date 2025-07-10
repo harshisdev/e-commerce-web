@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { productCategoriUpdateApi, uploadImageApi } from "../action/productApi";
 import { toast } from "react-toastify";
 import { Button, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AddCategoryPage = () => {
   const [showViewCategory, setShowViewCategory] = useState(false);
+  const accessToken = sessionStorage.getItem("accessToken");
+  const getRole = sessionStorage.getItem("role");
   const [formData, setFormData] = useState({
     name: "",
     image: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,6 +58,12 @@ const AddCategoryPage = () => {
       toast.error("Failed to add category");
     }
   };
+
+  useEffect(() => {
+    if (!accessToken && getRole !== "Admin") {
+      navigate("/");
+    }
+  }, [!accessToken, getRole !== "Admin"]);
 
   return (
     <div className="container minHeight">
