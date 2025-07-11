@@ -71,7 +71,7 @@ const Register = () => {
 
   const breadcrumbItems = [
     { label: "Home", to: "/" },
-    { label: "Login", active: true },
+    { label: "Register", active: true },
   ];
 
   return (
