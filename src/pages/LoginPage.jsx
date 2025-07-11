@@ -168,7 +168,11 @@ const Login = () => {
                   onChange={(e) => setTermsCondition(e.target.checked)}
                   tabIndex={3}
                 />
-                <label htmlFor="termcondition" className="ms-2">
+                <label
+                  htmlFor="termcondition"
+                  style={{ cursor: "pointer" }}
+                  className="ms-2"
+                >
                   I agree to the{" "}
                   <span
                     onClick={handleTermModal}
@@ -199,6 +203,12 @@ const Login = () => {
                     "Login"
                   )}
                 </button>
+              </div>
+              <div className="text-center mt-3">
+                <span>Forgot your password? </span>
+                <Link to="/reset-password" className="text-danger">
+                  Reset Password
+                </Link>
               </div>
               <div className="text-center mt-3">
                 <span>Don't have an account? </span>

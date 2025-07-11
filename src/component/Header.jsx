@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loginProfileApi } from "../action/productApi";
 import { toast } from "react-toastify";
 import { MdOutlineLogout } from "react-icons/md";
@@ -16,6 +16,7 @@ const Header = ({ cartCount }) => {
   const dispatch = useDispatch();
   const userRole = useSelector((state) => state.userRole.role);
   const userName = useSelector((state) => state.userName.name);
+  const location = useLocation();
 
   useEffect(() => {
     const loginProfile = async () => {
@@ -56,22 +57,24 @@ const Header = ({ cartCount }) => {
             E-Coumerce-{userRole === "admin" ? "Store" : "Web"}
           </div>
           <div className="col-auto d-flex align-items-center">
-            {!profileData || !accessToken ? (
-              <>
-                <Link
-                  to="/register"
-                  className="text-black text-decoration-none"
-                >
-                  Register
-                </Link>
-                <span className="px-2 text-black">/</span>
-                <Link to="/login" className="text-decoration-none text-black">
-                  Login
-                </Link>
-              </>
-            ) : (
-              ""
-            )}
+            {!profileData &&
+              !accessToken &&
+              location.pathname !== "/login" &&
+              location.pathname !== "/register" && (
+                <>
+                  <Link
+                    to="/register"
+                    className="text-black text-decoration-none"
+                  >
+                    Register
+                  </Link>
+                  <span className="px-2 text-black">/</span>
+                  <Link to="/login" className="text-decoration-none text-black">
+                    Login
+                  </Link>
+                </>
+              )}
+
             {userRole !== "admin" && (
               <div>
                 <Link

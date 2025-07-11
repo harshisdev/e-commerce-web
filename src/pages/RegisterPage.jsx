@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { userRegisterApi } from "../action/productApi";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import BreadCrumb from "../component/BreadCrumb";
 
@@ -205,6 +205,13 @@ const Register = () => {
                     "Register"
                   )}
                 </button>
+              </div>
+
+              <div className="text-center mt-3">
+                <span>Already have an account? </span>
+                <Link to="/login" className="text-danger">
+                  Login here
+                </Link>
               </div>
             </form>
           </div>
