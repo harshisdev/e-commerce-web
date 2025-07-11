@@ -127,37 +127,35 @@ const Login = () => {
                 />
               </div>
 
-              <div className="mb-3 position-relative">
+              <div className="mb-3">
                 <label htmlFor="password" className="form-label">
                   Password
                 </label>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className="form-control"
-                  name="password"
-                  id="password"
-                  tabIndex={2}
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
-                  minLength={5}
-                  maxLength={10}
-                />
-                {password.length > 0 && (
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: "38px",
-                      right: "15px",
-                      cursor: "pointer",
+                <div className="input-group">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className="form-control"
+                    name="password"
+                    id="password"
+                    tabIndex={2}
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
                     }}
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    tabIndex={-1}
-                  >
-                    {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
-                  </span>
-                )}
+                  />
+                  {password.length > 0 && (
+                    <span
+                      style={{
+                        cursor: "pointer",
+                      }}
+                      className="input-group-text"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      tabIndex={-1}
+                    >
+                      {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="d-flex mb-3">
                 <input

@@ -122,30 +122,30 @@ const ProfileUpdatePage = () => {
                 />
               </div>
 
-              <div className="mb-3 position-relative">
+              <div className="mb-3">
                 <label htmlFor="password" className="form-label">
                   Password
                 </label>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className="form-control"
-                  name="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  tabIndex={3}
-                />
-                <span
-                  style={{
-                    position: "absolute",
-                    top: "38px",
-                    right: "15px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => setShowPassword((prev) => !prev)}
-                >
-                  {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
-                </span>
+                <div className="input-group">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className="form-control"
+                    name="password"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    tabIndex={3}
+                  />
+                  <span
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    className="input-group-text"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                  >
+                    {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                  </span>
+                </div>
               </div>
 
               <div className="mb-3">
