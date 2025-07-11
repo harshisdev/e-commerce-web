@@ -10,8 +10,8 @@ const Footer = () => {
         <div className="row">
           <div className="col-12 text-center text-white">
             © {currentYear} E-Commerce-
-            {allUserData === "admin" ? "Store" : "Web"}. All rights reserved by
-            Harsh Kumar.
+            {allUserData?.role === "admin" ? "Store" : "Web"}. All rights
+            reserved by Harsh Kumar.
           </div>
         </div>
       </div>
