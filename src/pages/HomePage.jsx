@@ -44,7 +44,7 @@ const ProductCard = ({ onAddToCart }) => {
 
   const accessToken = sessionStorage.getItem("accessToken");
 
-  const userRole = useSelector((state) => state.userRole.role);
+  const allUserData = useSelector((state) => state.user.data);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -329,13 +329,17 @@ const ProductCard = ({ onAddToCart }) => {
         </div>
       </div>
       <div
-        className={`row ${userRole !== "admin" && "justify-content-between"}`}
+        className={`row ${
+          allUserData?.role !== "admin" && "justify-content-between"
+        }`}
       >
         <div className="col-auto d-none d-lg-flex align-items-center">
           <label className="fw-bold">Filter Products:</label>
         </div>
         <div
-          className={`col-12 ${userRole === "admin" ? "col-md" : "col-lg-4"}`}
+          className={`col-12 ${
+            allUserData?.role === "admin" ? "col-md" : "col-lg-4"
+          }`}
         >
           <select
             className="form-select"
@@ -350,14 +354,14 @@ const ProductCard = ({ onAddToCart }) => {
             ))}
           </select>
         </div>
-        {userRole === "admin" && (
+        {allUserData?.role === "admin" && (
           <>
             <div className="col-auto mt-3 mt-md-0 d-none d-lg-flex align-items-center">
               <label className="fw-bold">Update & Delete Products:</label>
             </div>
             <div
               className={`col-12 mt-3 mt-md-0 ${
-                userRole === "admin" ? "col-md" : "col-md-4"
+                allUserData?.role === "admin" ? "col-md" : "col-md-4"
               }`}
             >
               <div
@@ -434,11 +438,15 @@ const ProductCard = ({ onAddToCart }) => {
                   <h5 className="card-title" title={product.title}>
                     {truncateText(product.title, 25)}
                   </h5>
-                  <p className={`card-text ${userRole === "admin" && "mb-0"}`}>
+                  <p
+                    className={`card-text ${
+                      allUserData?.role === "admin" && "mb-0"
+                    }`}
+                  >
                     Price: ${product.price}
                   </p>
                   <div className="d-flex justify-content-between align-items-center">
-                    {userRole !== "admin" && (
+                    {allUserData?.role !== "admin" && (
                       <>
                         <div className="btn-group border">
                           <button
@@ -476,7 +484,7 @@ const ProductCard = ({ onAddToCart }) => {
                     )}
                   </div>
                 </div>
-                {userRole === "admin" && (
+                {allUserData?.role === "admin" && (
                   <>
                     <div
                       className="bg-light rounded-pill d-flex align-items-center product-view"

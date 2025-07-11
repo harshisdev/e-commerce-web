@@ -14,7 +14,7 @@ const AddCategoryPage = () => {
     image: "",
   });
 
-  const userRole = useSelector((state) => state.userRole.role);
+  const allUserData = useSelector((state) => state.user.data);
 
   const navigate = useNavigate();
 
@@ -63,10 +63,10 @@ const AddCategoryPage = () => {
   };
 
   useEffect(() => {
-    if (!accessToken && userRole !== "Admin") {
+    if (!accessToken && allUserData?.role !== "admin") {
       navigate("/");
     }
-  }, [!accessToken, userRole !== "Admin"]);
+  }, [!accessToken, allUserData?.role !== "admin"]);
 
   const breadcrumbItems = [
     { label: "Home", to: "/" },

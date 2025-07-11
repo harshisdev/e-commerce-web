@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { userProfileGetApi, userUpdateApi } from "../action/productApi";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import BreadCrumb from "../component/BreadCrumb";
 import { useDispatch } from "react-redux";
-import { userNameUpdate, userRoleUpdate } from "../app/slice/userSlice";
+import { allUserData, setUser } from "../app/slice/userSlice";
 
 const ProfileUpdatePage = () => {
   const [email, setEmail] = useState("");
@@ -53,8 +53,7 @@ const ProfileUpdatePage = () => {
     const updateUser = async () => {
       try {
         await userUpdateApi(userId, userData);
-        dispatch(userRoleUpdate(role));
-        dispatch(userNameUpdate(name));
+        dispatch(setUser(userData));
         toast.success("Profile Update Successfully!");
       } catch (error) {
         console.error("Profile Update failed:", error);

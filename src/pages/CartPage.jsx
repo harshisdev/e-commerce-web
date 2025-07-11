@@ -12,7 +12,7 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
   const [cartItems, setCartItems] = useState(initialCartItems || []);
   const [allSelected, setAllSelected] = useState(true);
   const accessToken = sessionStorage.getItem("accessToken");
-  const userRole = useSelector((state) => state.userRole.role);
+  const allUserData = useSelector((state) => state.user.data);
 
   useEffect(() => {
     if (initialCartItems?.length) {
@@ -82,7 +82,7 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
     }
   };
   useEffect(() => {
-    if (userRole === "admin") {
+    if (allUserData?.role === "admin") {
       navigate("/");
     }
   }, [accessToken]);

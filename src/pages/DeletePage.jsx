@@ -3,6 +3,8 @@ import { userDeleteApi, userProfileGetApi } from "../action/productApi";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import BreadCrumb from "../component/BreadCrumb";
+import { useDispatch } from "react-redux";
+import { logout } from "../app/slice/userSlice";
 
 const DeletePage = () => {
   const navigate = useNavigate();
@@ -12,6 +14,7 @@ const DeletePage = () => {
   const [loading, setLoading] = useState(false);
   const [userIdNotFound, setUserIdNotFound] = useState(false);
   const accessToken = sessionStorage.getItem("accessToken");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (userId) {
@@ -50,6 +53,7 @@ const DeletePage = () => {
       if (location.state?.userId === userId) {
         sessionStorage.clear();
         localStorage.clear();
+        dispatch(logout());
         navigate("/login");
       }
     } catch (error) {

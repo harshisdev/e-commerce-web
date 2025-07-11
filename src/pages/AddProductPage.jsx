@@ -13,6 +13,7 @@ import BreadCrumb from "../component/BreadCrumb";
 import { useSelector } from "react-redux";
 
 const AddProductPage = () => {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [showViewProduct, setShowViewProduct] = useState(false);
   const fileInputRef = useRef(null);
@@ -25,8 +26,8 @@ const AddProductPage = () => {
   });
   const [loading, setLoading] = useState(false);
   const accessToken = sessionStorage.getItem("accessToken");
-  const navigate = useNavigate();
-  const userRole = useSelector((state) => state.userRole.role);
+
+  const allUserData = useSelector((state) => state.user.data);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -121,10 +122,10 @@ const AddProductPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!accessToken && userRole !== "Admin") {
+    if (!accessToken && allUserData?.role !== "admin") {
       navigate("/");
     }
-  }, [!accessToken, userRole !== "Admin"]);
+  }, [!accessToken, allUserData?.role !== "admin"]);
 
   const breadcrumbItems = [
     { label: "Home", to: "/" },

@@ -7,27 +7,25 @@ import { IoAddOutline } from "react-icons/io5";
 import { CiUser } from "react-icons/ci";
 import defaultUserImg from "../assets/images/default-user.png";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, userNameUpdate, userRoleUpdate } from "../app/slice/userSlice";
 import { AiOutlineDelete } from "react-icons/ai";
+import { logout, setUser } from "../app/slice/userSlice";
 
 const Header = ({ cartCount }) => {
   const navigate = useNavigate();
-  const accessToken = sessionStorage.getItem("accessToken");
-  const [profileData, setprofileData] = useState(null);
-  const dispatch = useDispatch();
-  const userRole = useSelector((state) => state.userRole.role);
-  const userName = useSelector((state) => state.userName.name);
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  const accessToken = sessionStorage.getItem("accessToken");
+
+  const allUserData = useSelector((state) => state.user.data);
 
   useEffect(() => {
     const loginProfile = async () => {
       if (!accessToken) return;
       try {
         const data = await loginProfileApi(accessToken);
-        setprofileData(data);
         if (data) {
-          dispatch(userRoleUpdate(data?.role));
-          dispatch(userNameUpdate(data?.name));
+          dispatch(setUser(data));
         }
       } catch (error) {
         console.error("Profile fetch failed:", error);
@@ -42,7 +40,6 @@ const Header = ({ cartCount }) => {
 
   const handleLogout = () => {
     toast.success("Logout successfully !");
-    setprofileData(null);
     sessionStorage.clear();
     localStorage.clear();
     dispatch(logout());
@@ -57,16 +54,10 @@ const Header = ({ cartCount }) => {
       <div className="container">
         <div className="row align-items-center justify-content-between py-3">
           <div className="col-auto">
-            E-Coumerce-{userRole === "admin" ? "Store" : "Web"}
+            E-Coumerce-{allUserData?.role === "admin" ? "Store" : "Web"}
           </div>
           <div className="col-auto d-flex align-items-center">
-            {console.log(
-              !profileData &&
-                !accessToken &&
-                location.pathname !== "/login" &&
-                location.pathname !== "/register"
-            )}
-            {!profileData &&
+            {!allUserData &&
               !accessToken &&
               location.pathname !== "/login" &&
               location.pathname !== "/register" && (
@@ -84,7 +75,7 @@ const Header = ({ cartCount }) => {
                 </>
               )}
 
-            {userRole !== "admin" && (
+            {allUserData?.role !== "admin" && (
               <div>
                 <Link
                   to="/cart"
@@ -97,13 +88,14 @@ const Header = ({ cartCount }) => {
                 </Link>
               </div>
             )}
-            {profileData && accessToken && (
+            {allUserData && accessToken && (
               <div className="ms-2 d-flex align-items-center">
                 <div
                   style={{ textTransform: "capitalize" }}
                   className="d-none d-sm-block"
                 >
-                  {truncateText(userName, 10)} (<span>{userRole}</span>)
+                  {truncateText(allUserData?.name, 10)} (
+                  <span>{allUserData?.role}</span>)
                 </div>
                 <div className="dropdown pe-3">
                   <div
@@ -114,26 +106,16 @@ const Header = ({ cartCount }) => {
                   >
                     <img
                       className="rounded-pill img-fluid"
-                      src={profileData.avatar || { defaultUserImg }}
-                      alt={profileData.name}
+                      src={allUserData?.avatar || { defaultUserImg }}
+                      alt={allUserData?.name}
                     />
                   </div>
                   <ul
                     className="dropdown-menu mt-3 p-0"
                     style={{ minWidth: "190px" }}
                   >
-                    {userRole === "admin" && (
+                    {allUserData?.role === "admin" && (
                       <>
-                        <li className="bg-success border-bottom d-block d-sm-none py-2 text-white">
-                          <span className="ms-2">
-                            <CiUser className="fs-5 me-1" />{" "}
-                            {truncateText(profileData.name, 7)} (
-                            <span style={{ textTransform: "capitalize" }}>
-                              {profileData.role}
-                            </span>
-                            )
-                          </span>
-                        </li>
                         <li className="bg-success border-bottom">
                           <Link
                             to={"/add-category"}
@@ -154,20 +136,31 @@ const Header = ({ cartCount }) => {
                         </li>
                       </>
                     )}
+                    <li className="bg-success border-bottom d-block d-sm-none py-2 text-white">
+                      <span className="ms-2">
+                        <CiUser className="fs-5 me-1" />{" "}
+                        {truncateText(allUserData?.name, 7)} (
+                        <span style={{ textTransform: "capitalize" }}>
+                          {allUserData?.role}
+                        </span>
+                        )
+                      </span>
+                    </li>
                     <li className="bg-success border-bottom text-white">
                       <Link
                         to={`/profile-update`}
-                        state={{ userId: profileData.id }}
+                        state={{ userId: allUserData?.id }}
                         className="ms-2 d-block py-2 text-white text-decoration-none"
                       >
-                        <CiUser className="fs-5 me-1" /> Profile Update
+                        <CiUser className="fs-5 me-1" /> Profile Update (
+                        {allUserData?.id})
                       </Link>
                     </li>
                     <li className="bg-success border-bottom">
                       <Link
                         className="ms-2 d-block py-2 text-white text-decoration-none"
                         to="/delete"
-                        state={{ userId: profileData.id }}
+                        state={{ userId: allUserData?.id }}
                       >
                         <AiOutlineDelete className="me-2 fs-5" />
                         Delete Profile
