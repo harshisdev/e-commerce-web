@@ -113,16 +113,16 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
               </label>
             </>
           )}
-          {cartItems.length === 0 && (
-            <button className="btn btn-outline-success" onClick={handleShopNow}>
-              <IoAddOutline className="me-1 fs-5" /> Add Product
-            </button>
-          )}
         </div>
       </div>
       {cartItems.length === 0 ? (
         <>
           <p className="text-center text-danger mb-0">Your cart is empty.</p>
+          <div className="d-flex justify-content-center mt-4">
+            <button className="btn btn-outline-success" onClick={handleShopNow}>
+              <IoAddOutline className="me-1 fs-5" /> Add Product
+            </button>
+          </div>
         </>
       ) : (
         <>
