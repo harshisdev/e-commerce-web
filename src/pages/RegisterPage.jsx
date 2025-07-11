@@ -49,9 +49,11 @@ const Register = () => {
         avatar: avatar,
       };
       try {
-        await userRegisterApi(payload);
+        const res = await userRegisterApi(payload);
         toast.success("Registration Successfully!");
-        navigate("/login");
+        if (res.id) {
+          navigate("/login", { state: { userId: res.id } });
+        }
       } catch (error) {
         console.error("Registration failed:", error);
         toast.error("Registration failed. Please try again.");

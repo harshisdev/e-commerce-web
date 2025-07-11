@@ -11,6 +11,8 @@ import AddCategoryPage from "./pages/AddCategoryPage";
 import AddProductPage from "./pages/AddProductPage";
 import ViewProductPage from "./pages/ViewProductPage";
 import ProfileUpdatePage from "./pages/ProfileUpdatePage";
+import TermsAndConditions from "./pages/TermsAndConditionsPage";
+import PageNotFound from "./pages/PageNotFoundPage";
 
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -56,6 +58,7 @@ const App = () => {
         <Route path="/view-product/:id" element={<ViewProductPage />} />
         <Route path="/add-category" element={<AddCategoryPage />} />
         <Route path="/add-product" element={<AddProductPage />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
       <Footer />
       <ToastContainer />

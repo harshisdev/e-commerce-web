@@ -1,17 +1,37 @@
 import { toast } from "react-toastify";
-import { loginUserApi } from "../action/productApi";
-import { Link, useNavigate } from "react-router-dom";
+import { loginUserApi, userProfileGetApi } from "../action/productApi";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import BreadCrumb from "../component/BreadCrumb";
+import TermsAndConditions from "./TermsAndConditionsPage";
+import { Button, Modal } from "react-bootstrap";
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [termsCondition, setTermsCondition] = useState(false);
   const [loading, setLoading] = useState(false);
-  const token = sessionStorage.getItem("accessToken");
+  const [termModal, setTermModal] = useState(false);
+  const location = useLocation();
+  const userId = location.state?.userId;
+
+  useEffect(() => {
+    const userProfileGet = async () => {
+      try {
+        const res = await userProfileGetApi(userId);
+        if (res) {
+          setEmail(res.email);
+          setPassword(res.password);
+        }
+      } catch (error) {
+        console.error("Login failed:", error);
+      }
+    };
+    userProfileGet();
+  }, [userId]);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -21,6 +41,10 @@ const Login = () => {
     }
     if (!password) {
       toast.error("Password is required.");
+      return;
+    }
+    if (!termsCondition) {
+      toast.error("Term & condition is required.");
       return;
     }
     setLoading(true);
@@ -51,7 +75,9 @@ const Login = () => {
 
     loginUser();
   };
+
   useEffect(() => {
+    const token = sessionStorage.getItem("accessToken");
     if (token) {
       navigate("/");
     }
@@ -61,6 +87,10 @@ const Login = () => {
     { label: "Home", to: "/" },
     { label: "Login", active: true },
   ];
+
+  const handleTermModal = () => {
+    setTermModal(true);
+  };
 
   return (
     <div className="container minHeight">
@@ -126,6 +156,25 @@ const Login = () => {
                   </span>
                 )}
               </div>
+              <div className="d-flex mb-3">
+                <input
+                  type="checkbox"
+                  className="form-check"
+                  id="termcondition"
+                  value={termsCondition}
+                  onChange={(e) => setTermsCondition(e.target.checked)}
+                  tabIndex={3}
+                />
+                <label htmlFor="termcondition" className="ms-2">
+                  I agree to the{" "}
+                  <span
+                    onClick={handleTermModal}
+                    className="text-primary text-decoration-underline"
+                  >
+                    Terms and Conditions
+                  </span>
+                </label>
+              </div>
 
               <div className="d-flex justify-content-center">
                 <button
@@ -158,6 +207,32 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <Modal
+        show={termModal}
+        onHide={() => setTermModal(false)}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Terms and Conditions</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <TermsAndConditions />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => {
+              setTermsCondition(false);
+              setTermModal(false);
+            }}
+          >
+            Okay
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
