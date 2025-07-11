@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import BreadCrumb from "../component/BreadCrumb";
+import { useDispatch } from "react-redux";
+import { userNameUpdate, userRoleUpdate } from "../app/slice/userSlice";
 
 const UpdateProfile = () => {
   const { id } = useParams();
@@ -16,6 +18,7 @@ const UpdateProfile = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const accessToken = sessionStorage.getItem("accessToken");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -49,7 +52,8 @@ const UpdateProfile = () => {
     const updateUser = async () => {
       try {
         await userUpdateApi(id, userData);
-        sessionStorage.setItem("role", role);
+        dispatch(userRoleUpdate(role));
+        dispatch(userNameUpdate(name));
         toast.success("Profile Update Successfully!");
       } catch (error) {
         console.error("Profile Update failed:", error);
@@ -74,7 +78,7 @@ const UpdateProfile = () => {
   ];
 
   return (
-    <div className="container minHeight">
+    <div className="container minHeight mb-4">
       <div className="row my-4">
         <div className="col-12">
           <BreadCrumb items={breadcrumbItems} />

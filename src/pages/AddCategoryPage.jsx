@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { productCategoriUpdateApi, uploadImageApi } from "../action/productApi";
 import { toast } from "react-toastify";
 import { Button, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import BreadCrumb from "../component/BreadCrumb";
+import { useSelector } from "react-redux";
 
 const AddCategoryPage = () => {
   const [showViewCategory, setShowViewCategory] = useState(false);
   const accessToken = sessionStorage.getItem("accessToken");
-  const getRole = sessionStorage.getItem("role");
   const [formData, setFormData] = useState({
     name: "",
     image: "",
   });
+
+  const userRole = useSelector((state) => state.userRole.role);
 
   const navigate = useNavigate();
 
@@ -61,10 +63,10 @@ const AddCategoryPage = () => {
   };
 
   useEffect(() => {
-    if (!accessToken && getRole !== "Admin") {
+    if (!accessToken && userRole !== "Admin") {
       navigate("/");
     }
-  }, [!accessToken, getRole !== "Admin"]);
+  }, [!accessToken, userRole !== "Admin"]);
 
   const breadcrumbItems = [
     { label: "Home", to: "/" },
@@ -73,15 +75,14 @@ const AddCategoryPage = () => {
 
   return (
     <div className="container minHeight">
-      <div className="row">
+      <div className="row my-4">
         <div className="col-12">
           <BreadCrumb items={breadcrumbItems} />
-          <h2 className="my-4 fs-5">Add New Category</h2>
         </div>
       </div>
       <div className="row justify-content-center w-100">
         <div className="col-12 col-sm-6">
-          <form onSubmit={handleSubmit} className="p-4 border rounded w-96">
+          <form onSubmit={handleSubmit} className="p-4 border rounded">
             <div className="mb-3">
               <label className="mb-1">Name</label>
               <input

@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { Button, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import BreadCrumb from "../component/BreadCrumb";
+import { useSelector } from "react-redux";
 
 const AddProductPage = () => {
   const [categories, setCategories] = useState([]);
@@ -24,8 +25,8 @@ const AddProductPage = () => {
   });
   const [loading, setLoading] = useState(false);
   const accessToken = sessionStorage.getItem("accessToken");
-  const getRole = sessionStorage.getItem("role");
   const navigate = useNavigate();
+  const userRole = useSelector((state) => state.userRole.role);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -121,10 +122,10 @@ const AddProductPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!accessToken && getRole !== "Admin") {
+    if (!accessToken && userRole !== "Admin") {
       navigate("/");
     }
-  }, [!accessToken, getRole !== "Admin"]);
+  }, [!accessToken, userRole !== "Admin"]);
 
   const breadcrumbItems = [
     { label: "Home", to: "/" },
@@ -133,15 +134,14 @@ const AddProductPage = () => {
 
   return (
     <div className="container mb-4">
-      <div className="row">
+      <div className="row my-4">
         <div className="col-12">
           <BreadCrumb items={breadcrumbItems} />
-          <h2 className="my-4 fs-5">Add New Product</h2>
         </div>
       </div>
       <div className="row justify-content-center">
         <div className="col-12 col-md-6">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="p-4 border rounded">
             <div className="mb-3">
               <label className="form-label">Category</label>
               <select

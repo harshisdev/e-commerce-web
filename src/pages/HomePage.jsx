@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { GrUpdate } from "react-icons/gr";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import BreadCrumb from "../component/BreadCrumb";
+import { useSelector } from "react-redux";
 
 const ProductCard = ({ onAddToCart }) => {
   const navigate = useNavigate();
@@ -41,8 +41,9 @@ const ProductCard = ({ onAddToCart }) => {
     image: "",
   });
 
-  const getRole = sessionStorage.getItem("role");
   const accessToken = sessionStorage.getItem("accessToken");
+
+  const userRole = useSelector((state) => state.userRole.role);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -347,13 +348,13 @@ const ProductCard = ({ onAddToCart }) => {
         </div>
       </div>
       <div
-        className={`row ${getRole !== "admin" && "justify-content-between"}`}
+        className={`row ${userRole !== "admin" && "justify-content-between"}`}
       >
         <div className="col-auto d-none d-lg-flex align-items-center">
           <label className="fw-bold">Filter Products:</label>
         </div>
         <div
-          className={`col-12 ${getRole === "admin" ? "col-md" : "col-lg-4"}`}
+          className={`col-12 ${userRole === "admin" ? "col-md" : "col-lg-4"}`}
         >
           <select
             className="form-select"
@@ -368,14 +369,14 @@ const ProductCard = ({ onAddToCart }) => {
             ))}
           </select>
         </div>
-        {getRole === "admin" && (
+        {userRole === "admin" && (
           <>
             <div className="col-auto mt-3 mt-md-0 d-none d-lg-flex align-items-center">
               <label className="fw-bold">Update & Delete Products:</label>
             </div>
             <div
               className={`col-12 mt-3 mt-md-0 ${
-                getRole === "admin" ? "col-md" : "col-md-4"
+                userRole === "admin" ? "col-md" : "col-md-4"
               }`}
             >
               <div
@@ -451,11 +452,11 @@ const ProductCard = ({ onAddToCart }) => {
                   <h5 className="card-title" title={product.title}>
                     {truncateText(product.title, 25)}
                   </h5>
-                  <p className={`card-text ${getRole === "admin" && "mb-0"}`}>
+                  <p className={`card-text ${userRole === "admin" && "mb-0"}`}>
                     Price: ${product.price}
                   </p>
                   <div className="d-flex justify-content-between align-items-center">
-                    {getRole !== "admin" && (
+                    {userRole !== "admin" && (
                       <>
                         <div className="btn-group border">
                           <button
@@ -493,7 +494,7 @@ const ProductCard = ({ onAddToCart }) => {
                     )}
                   </div>
                 </div>
-                {getRole === "admin" && (
+                {userRole === "admin" && (
                   <>
                     <div
                       className="bg-light rounded-pill d-flex align-items-center product-view"

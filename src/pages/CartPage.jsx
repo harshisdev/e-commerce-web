@@ -5,13 +5,14 @@ import { MdShoppingCartCheckout } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import BreadCrumb from "../component/BreadCrumb";
+import { useSelector } from "react-redux";
 
 const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState(initialCartItems || []);
   const [allSelected, setAllSelected] = useState(true);
   const accessToken = sessionStorage.getItem("accessToken");
-  const getRole = sessionStorage.getItem("role");
+  const userRole = useSelector((state) => state.userRole.role);
 
   useEffect(() => {
     if (initialCartItems?.length) {
@@ -81,7 +82,7 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
     }
   };
   useEffect(() => {
-    if (getRole === "admin") {
+    if (userRole === "admin") {
       navigate("/");
     }
   }, [accessToken]);

@@ -75,7 +75,7 @@ const Register = () => {
   ];
 
   return (
-    <div className="container minHeight">
+    <div className="container minHeight mb-4">
       <div className="row my-4">
         <div className="col-12">
           <BreadCrumb items={breadcrumbItems} />

@@ -6,12 +6,16 @@ import { MdOutlineLogout } from "react-icons/md";
 import { IoAddOutline } from "react-icons/io5";
 import { CiUser } from "react-icons/ci";
 import defaultUserImg from "../assets/images/default-user.png";
+import { useDispatch, useSelector } from "react-redux";
+import { userNameUpdate, userRoleUpdate } from "../app/slice/userSlice";
 
 const Header = ({ cartCount }) => {
   const navigate = useNavigate();
   const accessToken = sessionStorage.getItem("accessToken");
   const [profileData, setprofileData] = useState(null);
-  const getRole = sessionStorage.getItem("role");
+  const dispatch = useDispatch();
+  const userRole = useSelector((state) => state.userRole.role);
+  const userName = useSelector((state) => state.userName.name);
 
   useEffect(() => {
     const loginProfile = async () => {
@@ -21,7 +25,8 @@ const Header = ({ cartCount }) => {
         const data = await loginProfileApi(accessToken);
         setprofileData(data);
         if (data) {
-          sessionStorage.setItem("role", data?.role);
+          dispatch(userRoleUpdate(data?.role));
+          dispatch(userNameUpdate(data?.name));
         }
       } catch (error) {
         console.error("Profile fetch failed:", error);
@@ -49,7 +54,7 @@ const Header = ({ cartCount }) => {
       <div className="container">
         <div className="row align-items-center justify-content-between py-3">
           <div className="col-auto">
-            E-Coumerce-{getRole === "admin" ? "Store" : "Web"}
+            E-Coumerce-{userRole === "admin" ? "Store" : "Web"}
           </div>
           <div className="col-auto d-flex align-items-center">
             {!profileData || !accessToken ? (
@@ -68,7 +73,7 @@ const Header = ({ cartCount }) => {
             ) : (
               ""
             )}
-            {getRole !== "admin" && (
+            {userRole !== "admin" && (
               <div>
                 <Link
                   to="/cart"
@@ -84,9 +89,9 @@ const Header = ({ cartCount }) => {
             {profileData && accessToken && (
               <div className="ms-2 d-flex align-items-center">
                 <div className="d-none d-sm-block">
-                  {truncateText(profileData.name, 10)}(
+                  {truncateText(userName, 10)}(
                   <span style={{ textTransform: "capitalize" }}>
-                    {profileData.role}
+                    {userRole}
                   </span>
                   )
                 </div>
@@ -107,7 +112,7 @@ const Header = ({ cartCount }) => {
                     className="dropdown-menu mt-3 p-0"
                     style={{ minWidth: "190px" }}
                   >
-                    {getRole === "admin" && (
+                    {userRole === "admin" && (
                       <>
                         <li className="bg-success border-bottom d-block d-sm-none py-2 text-white">
                           <span className="ms-2">
