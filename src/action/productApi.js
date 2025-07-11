@@ -8,8 +8,18 @@ export const userRegisterApi = async (userData) => {
   const response = await axiosClient.post("/users", userData);
   return response.data;
 };
+
 export const userUpdateApi = async (id, userData) => {
   const response = await axiosClient.put(`/users/${id}`, userData);
+  return response.data;
+};
+
+export const userDeleteApi = async (id, accessToken) => {
+  const response = await axiosClient.delete(`/users/${id}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return response.data;
 };
 

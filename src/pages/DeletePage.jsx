@@ -1,0 +1,131 @@
+import { useEffect, useState } from "react";
+import { userDeleteApi, userProfileGetApi } from "../action/productApi";
+import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
+import BreadCrumb from "../component/BreadCrumb";
+
+const DeletePage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [userId, setUserId] = useState(location.state?.userId);
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [userIdNotFound, setUserIdNotFound] = useState(false);
+  const accessToken = sessionStorage.getItem("accessToken");
+
+  useEffect(() => {
+    if (userId) {
+      const fetchUser = async () => {
+        try {
+          const res = await userProfileGetApi(userId, accessToken);
+          if (res) {
+            setName(res.name || "");
+          } else {
+            toast.error("ID is wrong.");
+          }
+        } catch (error) {
+          toast.error("Failed to fetch user.");
+          setName("");
+          setUserIdNotFound(true);
+          console.error("User Not Found", error);
+        }
+      };
+
+      fetchUser();
+    }
+  }, [userId]);
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    if (!userId) return toast.error("User ID is required.");
+    if (userIdNotFound) {
+      toast.error("Invalid user id. cannot delete.");
+      setName("");
+      return;
+    }
+    setLoading(true);
+    try {
+      await userDeleteApi(userId);
+      toast.success("Account deleted successfully!");
+      if (location.state?.userId === userId) {
+        sessionStorage.clear();
+        localStorage.clear();
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Account deletion failed:", error);
+      toast.error("Your account is delete.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!accessToken) {
+      navigate("/");
+    }
+  }, [accessToken]);
+
+  const breadcrumbItems = [
+    { label: "Home", to: "/" },
+    { label: "Delete Account", active: true },
+  ];
+
+  return (
+    <div className="container minHeight mb-4">
+      <div className="row my-4">
+        <div className="col-12">
+          <BreadCrumb items={breadcrumbItems} />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-12 d-flex justify-content-center">
+          <div
+            className="card p-4 shadow-lg"
+            style={{ width: "100%", maxWidth: "400px" }}
+          >
+            <h4 className="mb-3 text-center">Delete Account</h4>
+            {name && <p className="text-center text-primary">`Hey, {name}</p>}
+            <form onSubmit={handleDelete}>
+              <div className="mb-3">
+                <label htmlFor="userId" className="form-label">
+                  User ID
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="userId"
+                  value={userId}
+                  onChange={(e) => setUserId(e.target.value)}
+                />
+              </div>
+
+              <div className="d-flex justify-content-center">
+                <button
+                  type="submit"
+                  className="btn btn-outline-primary px-3 rounded-5"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Deleting...
+                    </>
+                  ) : (
+                    "Delete"
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DeletePage;

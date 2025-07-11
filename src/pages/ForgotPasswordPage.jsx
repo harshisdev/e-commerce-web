@@ -101,7 +101,7 @@ const ForgotPasswordPage = () => {
             style={{ width: "100%", maxWidth: "400px" }}
           >
             <h4 className="mb-3 text-center">Forgot Password</h4>
-            <p className="text-center text-primary">{name && `Hey, ${name}`}</p>
+            {name && <p className="text-center text-primary">`Hey, {name}</p>}
             <form onSubmit={handleForgot}>
               <div className="mb-3">
                 <label htmlFor="userId" className="form-label">

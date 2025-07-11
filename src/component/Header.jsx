@@ -8,6 +8,7 @@ import { CiUser } from "react-icons/ci";
 import defaultUserImg from "../assets/images/default-user.png";
 import { useDispatch, useSelector } from "react-redux";
 import { userNameUpdate, userRoleUpdate } from "../app/slice/userSlice";
+import { AiOutlineDelete } from "react-icons/ai";
 
 const Header = ({ cartCount }) => {
   const navigate = useNavigate();
@@ -153,6 +154,17 @@ const Header = ({ cartCount }) => {
                         <CiUser className="fs-5 me-1" /> Profile Update
                       </Link>
                     </li>
+                    <li className="bg-success">
+                      <Link
+                        className="ms-2 d-block py-2 text-white text-decoration-none"
+                        to="/delete"
+                        state={{ userId: profileData.id }}
+                      >
+                        <AiOutlineDelete className="me-2 fs-5" />
+                        Delete
+                      </Link>
+                    </li>
+
                     <li className="bg-success">
                       <Link
                         className="ms-2 d-block py-2 text-white text-decoration-none"

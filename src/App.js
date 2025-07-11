@@ -13,6 +13,7 @@ import ViewProductPage from "./pages/ViewProductPage";
 import ProfileUpdatePage from "./pages/ProfileUpdatePage";
 import PageNotFound from "./pages/PageNotFoundPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import DeletePage from "./pages/DeletePage";
 
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -46,6 +47,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/reset-password" element={<ForgotPasswordPage />} />
         <Route path="/profile-update/:id" element={<ProfileUpdatePage />} />
+        <Route path="/delete" element={<DeletePage />} />
         <Route
           path="/"
           element={<ProductCard onAddToCart={handleAddToCart} />}
