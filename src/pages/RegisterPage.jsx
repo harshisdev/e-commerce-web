@@ -75,134 +75,138 @@ const Register = () => {
   ];
 
   return (
-    <div className="container d-flex justify-content-center align-items-center minHeight">
-      <div className="row">
+    <div className="container minHeight">
+      <div className="row my-4">
         <div className="col-12">
           <BreadCrumb items={breadcrumbItems} />
         </div>
       </div>
-      <div
-        className="card p-4 shadow-lg mt-4"
-        style={{ width: "100%", maxWidth: "400px" }}
-      >
-        <h4 className="mb-3 text-center">Register</h4>
-        <form onSubmit={handleRegister}>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email address
-            </label>
-            <input
-              type="email"
-              className="form-control"
-              name="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              tabIndex={1}
-            />
-          </div>
+      <div className="row">
+        <div className="col-12 d-flex justify-content-center">
+          <div
+            className="card p-4 shadow-lg"
+            style={{ width: "100%", maxWidth: "400px" }}
+          >
+            <h4 className="mb-3 text-center">Register</h4>
+            <form onSubmit={handleRegister}>
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">
+                  Email address
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  name="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  tabIndex={1}
+                />
+              </div>
 
-          <div className="mb-3">
-            <label htmlFor="name" className="form-label">
-              Name
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              name="name"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              tabIndex={2}
-            />
-          </div>
+              <div className="mb-3">
+                <label htmlFor="name" className="form-label">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="name"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  tabIndex={2}
+                />
+              </div>
 
-          <div className="mb-3 position-relative">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              type={showPassword ? "text" : "password"}
-              className="form-control"
-              name="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              minLength={5}
-              maxLength={10}
-              tabIndex={2}
-            />
-            {password.length > 0 && (
-              <span
-                style={{
-                  position: "absolute",
-                  top: "38px",
-                  right: "15px",
-                  cursor: "pointer",
-                }}
-                onClick={() => setShowPassword((prev) => !prev)}
-                tabIndex={-1}
-              >
-                {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
-              </span>
-            )}
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="role" className="form-label">
-              Role
-            </label>
-            <select
-              className="form-select"
-              name="role"
-              id="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              tabIndex={3}
-            >
-              <option value="">Select Role</option>
-              <option value="admin">Admin</option>
-              <option value="customer">Customer</option>
-            </select>
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="avatar" className="form-label">
-              Avatar URL
-            </label>
-            <input
-              type="url"
-              className="form-control"
-              name="avatar"
-              id="avatar"
-              value={avatar}
-              onChange={(e) => setAvatar(e.target.value)}
-              tabIndex={4}
-            />
-          </div>
-
-          <div className="d-flex justify-content-center">
-            <button
-              type="submit"
-              className="btn btn-outline-primary px-3 rounded-5"
-              disabled={loading}
-              tabIndex={5}
-            >
-              {loading ? (
-                <>
+              <div className="mb-3 position-relative">
+                <label htmlFor="password" className="form-label">
+                  Password
+                </label>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="form-control"
+                  name="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  minLength={5}
+                  maxLength={10}
+                  tabIndex={2}
+                />
+                {password.length > 0 && (
                   <span
-                    className="spinner-border spinner-border-sm me-2"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                  Registering...
-                </>
-              ) : (
-                "Register"
-              )}
-            </button>
+                    style={{
+                      position: "absolute",
+                      top: "38px",
+                      right: "15px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                  </span>
+                )}
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="role" className="form-label">
+                  Role
+                </label>
+                <select
+                  className="form-select"
+                  name="role"
+                  id="role"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  tabIndex={3}
+                >
+                  <option value="">Select Role</option>
+                  <option value="admin">Admin</option>
+                  <option value="customer">Customer</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="avatar" className="form-label">
+                  Avatar URL
+                </label>
+                <input
+                  type="url"
+                  className="form-control"
+                  name="avatar"
+                  id="avatar"
+                  value={avatar}
+                  onChange={(e) => setAvatar(e.target.value)}
+                  tabIndex={4}
+                />
+              </div>
+
+              <div className="d-flex justify-content-center">
+                <button
+                  type="submit"
+                  className="btn btn-outline-primary px-3 rounded-5"
+                  disabled={loading}
+                  tabIndex={5}
+                >
+                  {loading ? (
+                    <>
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Registering...
+                    </>
+                  ) : (
+                    "Register"
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

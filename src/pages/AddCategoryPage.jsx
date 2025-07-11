@@ -73,8 +73,12 @@ const AddCategoryPage = () => {
 
   return (
     <div className="container minHeight">
-      <BreadCrumb items={breadcrumbItems} />
-      <h2 className="my-4 fs-5">Add New Category</h2>
+      <div className="row">
+        <div className="col-12">
+          <BreadCrumb items={breadcrumbItems} />
+          <h2 className="my-4 fs-5">Add New Category</h2>
+        </div>
+      </div>
       <div className="row justify-content-center w-100">
         <div className="col-12 col-sm-6">
           <form onSubmit={handleSubmit} className="p-4 border rounded w-96">

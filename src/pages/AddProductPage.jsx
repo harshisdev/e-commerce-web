@@ -133,8 +133,12 @@ const AddProductPage = () => {
 
   return (
     <div className="container mb-4">
-      <BreadCrumb items={breadcrumbItems} />
-      <h2 className="my-4 fs-5">Add New Product</h2>
+      <div className="row">
+        <div className="col-12">
+          <BreadCrumb items={breadcrumbItems} />
+          <h2 className="my-4 fs-5">Add New Product</h2>
+        </div>
+      </div>
       <div className="row justify-content-center">
         <div className="col-12 col-md-6">
           <form onSubmit={handleSubmit}>

@@ -63,96 +63,100 @@ const Login = () => {
   ];
 
   return (
-    <div className="container d-flex justify-content-center align-items-center minHeight">
-      <div className="row">
+    <div className="container minHeight">
+      <div className="row my-4">
         <div className="col-12">
           <BreadCrumb items={breadcrumbItems} />
         </div>
       </div>
-      <div
-        className="card p-4 shadow-lg mt-4"
-        style={{ width: "100%", maxWidth: "400px" }}
-      >
-        <h4 className="mb-3 text-center">Login</h4>
-        <form onSubmit={handleLogin}>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email address
-            </label>
-            <input
-              type="email"
-              className="form-control"
-              name="email"
-              id="email"
-              value={email}
-              tabIndex={1}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-            />
-          </div>
+      <div className="row">
+        <div className="col-12 d-flex justify-content-center">
+          <div
+            className="card p-4 shadow-lg"
+            style={{ width: "100%", maxWidth: "400px" }}
+          >
+            <h4 className="mb-3 text-center">Login</h4>
+            <form onSubmit={handleLogin}>
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">
+                  Email address
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  name="email"
+                  id="email"
+                  value={email}
+                  tabIndex={1}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                />
+              </div>
 
-          <div className="mb-3 position-relative">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              type={showPassword ? "text" : "password"}
-              className="form-control"
-              name="password"
-              id="password"
-              tabIndex={2}
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              minLength={5}
-              maxLength={10}
-            />
-            {password.length > 0 && (
-              <span
-                style={{
-                  position: "absolute",
-                  top: "38px",
-                  right: "15px",
-                  cursor: "pointer",
-                }}
-                onClick={() => setShowPassword((prev) => !prev)}
-                tabIndex={-1}
-              >
-                {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
-              </span>
-            )}
-          </div>
-
-          <div className="d-flex justify-content-center">
-            <button
-              type="submit"
-              className="btn btn-outline-primary px-3 rounded-5 d-flex align-items-center gap-2"
-              disabled={loading}
-              tabIndex={3}
-            >
-              {loading ? (
-                <>
+              <div className="mb-3 position-relative">
+                <label htmlFor="password" className="form-label">
+                  Password
+                </label>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="form-control"
+                  name="password"
+                  id="password"
+                  tabIndex={2}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                  minLength={5}
+                  maxLength={10}
+                />
+                {password.length > 0 && (
                   <span
-                    className="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                  Logging in...
-                </>
-              ) : (
-                "Login"
-              )}
-            </button>
+                    style={{
+                      position: "absolute",
+                      top: "38px",
+                      right: "15px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                  </span>
+                )}
+              </div>
+
+              <div className="d-flex justify-content-center">
+                <button
+                  type="submit"
+                  className="btn btn-outline-primary px-3 rounded-5 d-flex align-items-center gap-2"
+                  disabled={loading}
+                  tabIndex={3}
+                >
+                  {loading ? (
+                    <>
+                      <span
+                        className="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Logging in...
+                    </>
+                  ) : (
+                    "Login"
+                  )}
+                </button>
+              </div>
+              <div className="text-center mt-3">
+                <span>Don't have an account? </span>
+                <Link to="/register" className="text-danger">
+                  Register here
+                </Link>
+              </div>
+            </form>
           </div>
-          <div className="text-center mt-3">
-            <span>Don't have an account? </span>
-            <Link to="/register" className="text-danger">
-              Register here
-            </Link>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   );
