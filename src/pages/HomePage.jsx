@@ -34,6 +34,7 @@ const ProductCard = ({ onAddToCart }) => {
   const [showUpdateProductId, setShowUpdateProductId] = useState("");
   const [showUpdateCategoryModal, setshowUpdateCategoryModal] = useState(false);
   const [categoryToUpdate, setCategoryToUpdate] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -45,12 +46,15 @@ const ProductCard = ({ onAddToCart }) => {
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       try {
         const data = await productListApi();
         setProducts(data);
         setFilteredProducts(data);
       } catch (error) {
         console.error("Failed to fetch products:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -411,109 +415,113 @@ const ProductCard = ({ onAddToCart }) => {
           </>
         )}
       </div>
-      <div className="row mt-4">
-        {filteredProducts.map((product) => (
-          <div
-            className="col-12 col-md-6 col-lg-4 col-xl-3 mb-4"
-            key={product.id}
-          >
-            <div className="card h-100">
-              <div
-                className="overflow-hidden position-relative"
-                style={{ maxHeight: "355px" }}
-              >
-                <img
-                  className="card-img-top img-fluid"
-                  src={product.images[0]}
-                  alt={product.title}
-                />
+      {!loading && filteredProducts.length >= 0 ? (
+        <div className="row mt-4">
+          {filteredProducts.map((product) => (
+            <div
+              className="col-12 col-md-6 col-lg-4 col-xl-3 mb-4"
+              key={product.id}
+            >
+              <div className="card h-100">
                 <div
-                  className="product-view"
-                  style={{
-                    bottom: "15px",
-                    top: "unset",
-                  }}
+                  className="overflow-hidden position-relative"
+                  style={{ maxHeight: "355px" }}
                 >
-                  <Link
-                    className="bg-light rounded-pill d-flex align-items-center"
-                    to={`/view-product/${product.id}`}
+                  <img
+                    className="card-img-top img-fluid"
+                    src={product.images[0]}
+                    alt={product.title}
+                  />
+                  <div
+                    className="product-view"
+                    style={{
+                      bottom: "15px",
+                      top: "unset",
+                    }}
                   >
-                    <IoEyeOutline className="fs-3 text-black" />
-                  </Link>
+                    <Link
+                      className="bg-light rounded-pill d-flex align-items-center"
+                      to={`/view-product/${product.id}`}
+                    >
+                      <IoEyeOutline className="fs-3 text-black" />
+                    </Link>
+                  </div>
                 </div>
-              </div>
-              <div className="card-body">
-                <h5 className="card-title" title={product.title}>
-                  {truncateText(product.title, 25)}
-                </h5>
-                <p className={`card-text ${getRole === "admin" && "mb-0"}`}>
-                  Price: ${product.price}
-                </p>
-                <div className="d-flex justify-content-between align-items-center">
-                  {getRole !== "admin" && (
-                    <>
-                      <div className="btn-group border">
-                        <button
-                          className="btn btn-outline-secondary btn-sm"
-                          onClick={() => handleQuantityChange(product.id, -1)}
-                        >
-                          -
-                        </button>
-                        <span className="mx-2">
-                          {productQuantities[product.id] || 0}
-                        </span>
-                        <button
-                          className="btn btn-outline-secondary btn-sm"
-                          onClick={() => handleQuantityChange(product.id, 1)}
-                        >
-                          <IoAddOutline className="fs-5" />
-                        </button>
-                      </div>
-                      <button
-                        className="btn btn-primary btn-sm"
-                        onClick={() => handleAddToCart(product.id)}
-                        disabled={!(productQuantities[product.id] > 0)}
-                      >
-                        Add To Cart
-                      </button>
-                      {showGotoCart[product.id] && (
+                <div className="card-body">
+                  <h5 className="card-title" title={product.title}>
+                    {truncateText(product.title, 25)}
+                  </h5>
+                  <p className={`card-text ${getRole === "admin" && "mb-0"}`}>
+                    Price: ${product.price}
+                  </p>
+                  <div className="d-flex justify-content-between align-items-center">
+                    {getRole !== "admin" && (
+                      <>
+                        <div className="btn-group border">
+                          <button
+                            className="btn btn-outline-secondary btn-sm"
+                            onClick={() => handleQuantityChange(product.id, -1)}
+                          >
+                            -
+                          </button>
+                          <span className="mx-2">
+                            {productQuantities[product.id] || 0}
+                          </span>
+                          <button
+                            className="btn btn-outline-secondary btn-sm"
+                            onClick={() => handleQuantityChange(product.id, 1)}
+                          >
+                            <IoAddOutline className="fs-5" />
+                          </button>
+                        </div>
                         <button
                           className="btn btn-primary btn-sm"
-                          onClick={() => handleGoToCart(product.id)}
+                          onClick={() => handleAddToCart(product.id)}
+                          disabled={!(productQuantities[product.id] > 0)}
                         >
-                          Go To Cart
+                          Add To Cart
                         </button>
-                      )}
-                    </>
-                  )}
+                        {showGotoCart[product.id] && (
+                          <button
+                            className="btn btn-primary btn-sm"
+                            onClick={() => handleGoToCart(product.id)}
+                          >
+                            Go To Cart
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </div>
+                {getRole === "admin" && (
+                  <>
+                    <div
+                      className="bg-light rounded-pill d-flex align-items-center product-view"
+                      onClick={() => delateProductModal(product.id)}
+                    >
+                      <AiOutlineDelete className="fs-2 text-danger p-1" />
+                    </div>
+                    <div
+                      className="bg-light rounded-pill d-flex align-items-center product-view"
+                      style={{ left: "20px", right: "unset" }}
+                      onClick={() => productUpdateModal(product.id)}
+                    >
+                      <GrUpdate className="fs-2 text-success p-1" />
+                    </div>
+                  </>
+                )}
               </div>
-              {getRole === "admin" && (
-                <>
-                  <div
-                    className="bg-light rounded-pill d-flex align-items-center product-view"
-                    onClick={() => delateProductModal(product.id)}
-                  >
-                    <AiOutlineDelete className="fs-2 text-danger p-1" />
-                  </div>
-                  <div
-                    className="bg-light rounded-pill d-flex align-items-center product-view"
-                    style={{ left: "20px", right: "unset" }}
-                    onClick={() => productUpdateModal(product.id)}
-                  >
-                    <GrUpdate className="fs-2 text-success p-1" />
-                  </div>
-                </>
-              )}
             </div>
-          </div>
-        ))}
-        {filteredProducts?.length === 0 && (
-          <p className="text-center text-warning">
-            Oops! No products available.
-          </p>
-        )}
-      </div>
+          ))}
+          {filteredProducts?.length === 0 && (
+            <p className="text-center text-warning">
+              Oops! No products available.
+            </p>
+          )}
+        </div>
+      ) : (
+        "loading..."
+      )}
 
       <Modal
         show={showDeleteProductModal}
