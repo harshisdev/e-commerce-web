@@ -397,7 +397,7 @@ const ProductCard = ({ onAddToCart }) => {
                     >
                       <span className="w-75">{category.name}</span>
                       <button
-                        className="btn btn-success p-1 px-2"
+                        className="btn btn-success p-1 px-2 me-2"
                         onClick={() => confirmUpdateCategoryModal(category.id)}
                       >
                         <GrUpdate className="fs-5" />
