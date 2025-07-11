@@ -7,7 +7,7 @@ import BreadCrumb from "../component/BreadCrumb";
 import { useDispatch } from "react-redux";
 import { userNameUpdate, userRoleUpdate } from "../app/slice/userSlice";
 
-const UpdateProfile = () => {
+const ProfileUpdatePage = () => {
   const { id } = useParams();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -209,4 +209,4 @@ const UpdateProfile = () => {
   );
 };
 
-export default UpdateProfile;
+export default ProfileUpdatePage;

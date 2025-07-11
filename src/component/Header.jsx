@@ -89,7 +89,7 @@ const Header = ({ cartCount }) => {
             {profileData && accessToken && (
               <div className="ms-2 d-flex align-items-center">
                 <div className="d-none d-sm-block">
-                  {truncateText(userName, 10)}(
+                  {truncateText(userName, 10)} (
                   <span style={{ textTransform: "capitalize" }}>
                     {userRole}
                   </span>
@@ -146,7 +146,7 @@ const Header = ({ cartCount }) => {
                     )}
                     <li className="bg-success border-bottom text-white">
                       <Link
-                        to={`/update-profile/${profileData.id}`}
+                        to={`/profile-update/${profileData.id}`}
                         className="ms-2 d-block py-2 text-white text-decoration-none"
                       >
                         <CiUser className="fs-5 me-1" /> Profile Update

@@ -9,8 +9,9 @@ import { ToastContainer } from "react-toastify";
 import Footer from "./component/Footer";
 import AddCategoryPage from "./pages/AddCategoryPage";
 import AddProductPage from "./pages/AddProductPage";
-import UpdateProfile from "./pages/UpdateProfile";
 import ViewProductPage from "./pages/ViewProductPage";
+import ProfileUpdatePage from "./pages/ProfileUpdatePage";
+
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
 
@@ -23,7 +24,7 @@ const App = () => {
             ? {
                 ...item,
                 quantity: item.quantity + quantity,
-                selected: true, // optional: reselect if added again
+                selected: true,
               }
             : item
         );
@@ -41,7 +42,7 @@ const App = () => {
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/update-profile/:id" element={<UpdateProfile />} />
+        <Route path="/profile-update/:id" element={<ProfileUpdatePage />} />
         <Route
           path="/"
           element={<ProductCard onAddToCart={handleAddToCart} />}
