@@ -16,7 +16,7 @@ import { GrUpdate } from "react-icons/gr";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useSelector } from "react-redux";
-import Loading from "../component/Loading";
+import Loader from "../component/Loader";
 
 const ProductCard = ({ onAddToCart }) => {
   const navigate = useNavigate();
@@ -502,7 +502,7 @@ const ProductCard = ({ onAddToCart }) => {
           )}
         </div>
       ) : (
-        <Loading />
+        <Loader />
       )}
 
       <Modal
