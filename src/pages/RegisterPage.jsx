@@ -3,6 +3,7 @@ import { userRegisterApi } from "../action/productApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import BreadCrumb from "../component/BreadCrumb";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -68,8 +69,18 @@ const Register = () => {
     }
   }, [token]);
 
+  const breadcrumbItems = [
+    { label: "Home", to: "/" },
+    { label: "Login", active: true },
+  ];
+
   return (
     <div className="container d-flex justify-content-center align-items-center minHeight">
+      <div className="row">
+        <div className="col-12">
+          <BreadCrumb items={breadcrumbItems} />
+        </div>
+      </div>
       <div
         className="card p-4 shadow-lg mt-4"
         style={{ width: "100%", maxWidth: "400px" }}
@@ -87,6 +98,7 @@ const Register = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              tabIndex={1}
             />
           </div>
 
@@ -101,6 +113,7 @@ const Register = () => {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              tabIndex={2}
             />
           </div>
 
@@ -117,6 +130,7 @@ const Register = () => {
               onChange={(e) => setPassword(e.target.value)}
               minLength={5}
               maxLength={10}
+              tabIndex={2}
             />
             {password.length > 0 && (
               <span
@@ -144,6 +158,7 @@ const Register = () => {
               id="role"
               value={role}
               onChange={(e) => setRole(e.target.value)}
+              tabIndex={3}
             >
               <option value="">Select Role</option>
               <option value="admin">Admin</option>
@@ -162,6 +177,7 @@ const Register = () => {
               id="avatar"
               value={avatar}
               onChange={(e) => setAvatar(e.target.value)}
+              tabIndex={4}
             />
           </div>
 
@@ -170,8 +186,20 @@ const Register = () => {
               type="submit"
               className="btn btn-outline-primary px-3 rounded-5"
               disabled={loading}
+              tabIndex={5}
             >
-              {loading ? "Registering..." : "Register"}
+              {loading ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Registering...
+                </>
+              ) : (
+                "Register"
+              )}
             </button>
           </div>
         </form>

@@ -9,6 +9,7 @@ import {
 import { toast } from "react-toastify";
 import { Button, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import BreadCrumb from "../component/BreadCrumb";
 
 const AddProductPage = () => {
   const [categories, setCategories] = useState([]);
@@ -125,8 +126,14 @@ const AddProductPage = () => {
     }
   }, [!accessToken, getRole !== "Admin"]);
 
+  const breadcrumbItems = [
+    { label: "Home", to: "/" },
+    { label: "Add New Product", active: true },
+  ];
+
   return (
     <div className="container mb-4">
+      <BreadCrumb items={breadcrumbItems} />
       <h2 className="my-4 fs-5">Add New Product</h2>
       <div className="row justify-content-center">
         <div className="col-12 col-md-6">

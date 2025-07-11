@@ -4,6 +4,7 @@ import { IoAddOutline } from "react-icons/io5";
 import { MdShoppingCartCheckout } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import BreadCrumb from "../component/BreadCrumb";
 
 const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
   const navigate = useNavigate();
@@ -12,12 +13,11 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
   const accessToken = sessionStorage.getItem("accessToken");
   const getRole = sessionStorage.getItem("role");
 
-  // Optional: Sync with prop updates (if cartItems are passed from parent and change dynamically)
   useEffect(() => {
     if (initialCartItems?.length) {
       const itemsWithSelection = initialCartItems.map((item) => ({
         ...item,
-        selected: item.selected ?? true, // default to true
+        selected: item.selected ?? true,
       }));
       setCartItems(itemsWithSelection);
     } else {
@@ -85,11 +85,17 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
       navigate("/");
     }
   }, [accessToken]);
-
+  const breadcrumbItems = [
+    { label: "Home", to: "/" },
+    { label: "Cart", active: true },
+  ];
   return (
     <div className="container minHeight">
       <div className="row my-4">
-        <div className="col">
+        <div className="col-6">
+          <BreadCrumb items={breadcrumbItems} />
+        </div>
+        <div className="col-6 text-end">
           <h2 className="mb-0">🛒 Your Cart</h2>
         </div>
         <div className="col-auto d-flex align-items-center">

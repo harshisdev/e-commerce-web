@@ -3,6 +3,7 @@ import { productCategoriUpdateApi, uploadImageApi } from "../action/productApi";
 import { toast } from "react-toastify";
 import { Button, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import BreadCrumb from "../component/BreadCrumb";
 
 const AddCategoryPage = () => {
   const [showViewCategory, setShowViewCategory] = useState(false);
@@ -65,8 +66,14 @@ const AddCategoryPage = () => {
     }
   }, [!accessToken, getRole !== "Admin"]);
 
+  const breadcrumbItems = [
+    { label: "Home", to: "/" },
+    { label: "Add New Category", active: true },
+  ];
+
   return (
     <div className="container minHeight">
+      <BreadCrumb items={breadcrumbItems} />
       <h2 className="my-4 fs-5">Add New Category</h2>
       <div className="row justify-content-center w-100">
         <div className="col-12 col-sm-6">

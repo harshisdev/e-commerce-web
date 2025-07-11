@@ -3,6 +3,7 @@ import { loginUserApi } from "../action/productApi";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import BreadCrumb from "../component/BreadCrumb";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -56,8 +57,18 @@ const Login = () => {
     }
   }, []);
 
+  const breadcrumbItems = [
+    { label: "Home", to: "/" },
+    { label: "Login", active: true },
+  ];
+
   return (
     <div className="container d-flex justify-content-center align-items-center minHeight">
+      <div className="row">
+        <div className="col-12">
+          <BreadCrumb items={breadcrumbItems} />
+        </div>
+      </div>
       <div
         className="card p-4 shadow-lg mt-4"
         style={{ width: "100%", maxWidth: "400px" }}

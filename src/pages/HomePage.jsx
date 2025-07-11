@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { GrUpdate } from "react-icons/gr";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import BreadCrumb from "../component/BreadCrumb";
 
 const ProductCard = ({ onAddToCart }) => {
   const navigate = useNavigate();
@@ -435,7 +436,7 @@ const ProductCard = ({ onAddToCart }) => {
                 >
                   <Link
                     className="bg-light rounded-pill d-flex align-items-center"
-                    to={`/product-view/${product.id}`}
+                    to={`/view-product/${product.id}`}
                   >
                     <IoEyeOutline className="fs-3 text-black" />
                   </Link>

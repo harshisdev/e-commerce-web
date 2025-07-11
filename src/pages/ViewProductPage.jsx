@@ -3,10 +3,11 @@ import { productViewiApi } from "../action/productApi";
 import { Link, useParams } from "react-router-dom";
 import Slider from "react-slick";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
+import BreadCrumb from "../component/BreadCrumb";
 
 const ViewProductPage = () => {
   const { id } = useParams();
-  const [productView, setProductView] = useState();
+  const [productView, setProductView] = useState(null);
 
   useEffect(() => {
     const fetchproductViewi = async () => {
@@ -32,21 +33,17 @@ const ViewProductPage = () => {
     dots: productView?.images?.length > 1,
   };
 
+  const breadcrumbItems = [
+    { label: "Home", to: "/" },
+    { label: "View Product", active: true },
+  ];
+
   return (
     <div className="container minHeight">
       <div className="row mt-4 justify-content-center position-relative">
-        <Link
-          to="/"
-          style={{
-            position: "absolute",
-            top: "-15px",
-            left: "0px",
-            textAlign: "end",
-            color: "#000",
-          }}
-        >
-          <IoArrowBackCircleOutline className="fs-1" />
-        </Link>
+        <div className="col-12">
+          <BreadCrumb items={breadcrumbItems} />
+        </div>
         <div className="col-12 col-md-6 col-lg-4 my-4">
           <div className="card h-100">
             <div className="carousel-wrapper" data-aos="fade-up">

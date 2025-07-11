@@ -3,6 +3,7 @@ import { userProfileGetApi, userUpdateApi } from "../action/productApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import BreadCrumb from "../component/BreadCrumb";
 
 const UpdateProfile = () => {
   const { id } = useParams();
@@ -12,6 +13,7 @@ const UpdateProfile = () => {
   const [role, setRole] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const accessToken = sessionStorage.getItem("accessToken");
 
@@ -32,7 +34,7 @@ const UpdateProfile = () => {
     getUserProfile();
   }, [id]);
 
-  const handleSubmit = (e) => {
+  const handleUpdate = (e) => {
     e.preventDefault();
     const userData = {
       email,
@@ -40,16 +42,20 @@ const UpdateProfile = () => {
       role,
       avatar,
     };
+    setLoading(true);
 
     if (password) userData.password = password;
 
     const updateUser = async () => {
       try {
         await userUpdateApi(id, userData);
+        sessionStorage.setItem("role", role);
         toast.success("Profile Update Successfully!");
       } catch (error) {
         console.error("Profile Update failed:", error);
         toast.error("Profile Update failed. Please try again.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -62,14 +68,24 @@ const UpdateProfile = () => {
     }
   }, [!accessToken]);
 
+  const breadcrumbItems = [
+    { label: "Home", to: "/" },
+    { label: "Update Profile", active: true },
+  ];
+
   return (
     <div className="container d-flex justify-content-center align-items-center minHeight">
+      <div className="row">
+        <div className="col-12">
+          <BreadCrumb items={breadcrumbItems} />
+        </div>
+      </div>
       <div
         className="card p-4 shadow-lg mt-4"
         style={{ width: "100%", maxWidth: "400px" }}
       >
         <h4 className="mb-3 text-center">Update</h4>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleUpdate}>
           <div className="mb-3">
             <label htmlFor="email" className="form-label">
               Email address
@@ -81,6 +97,7 @@ const UpdateProfile = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              tabIndex={1}
             />
           </div>
 
@@ -95,6 +112,7 @@ const UpdateProfile = () => {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              tabIndex={2}
             />
           </div>
 
@@ -109,6 +127,7 @@ const UpdateProfile = () => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              tabIndex={3}
             />
             <span
               style={{
@@ -118,7 +137,6 @@ const UpdateProfile = () => {
                 cursor: "pointer",
               }}
               onClick={() => setShowPassword((prev) => !prev)}
-              tabIndex={-1}
             >
               {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
             </span>
@@ -128,14 +146,13 @@ const UpdateProfile = () => {
             <label htmlFor="role" className="form-label">
               Role
             </label>
-
             <select
               className="form-select"
               name="role"
               id="role"
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              required
+              tabIndex={4}
             >
               <option value="">Select Role</option>
               <option value="admin">Admin</option>
@@ -154,12 +171,30 @@ const UpdateProfile = () => {
               id="avatar"
               value={avatar}
               onChange={(e) => setAvatar(e.target.value)}
+              tabIndex={5}
             />
           </div>
 
-          <button type="submit" className="btn btn-primary w-100">
-            Update Profile
-          </button>
+          <div className="d-flex justify-content-center">
+            <button
+              type="submit"
+              className="btn btn-outline-primary px-3 rounded-5"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Updateing Profile...
+                </>
+              ) : (
+                "Update Profile"
+              )}
+            </button>
+          </div>
         </form>
       </div>
     </div>
