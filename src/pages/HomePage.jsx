@@ -42,8 +42,6 @@ const ProductCard = ({ onAddToCart }) => {
     image: "",
   });
 
-  const accessToken = sessionStorage.getItem("accessToken");
-
   const allUserData = useSelector((state) => state.user.data);
 
   useEffect(() => {

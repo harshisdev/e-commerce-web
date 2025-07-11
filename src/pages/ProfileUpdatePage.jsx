@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import BreadCrumb from "../component/BreadCrumb";
 import { useDispatch } from "react-redux";
-import { allUserData, setUser } from "../app/slice/userSlice";
+import { setUser } from "../app/slice/userSlice";
 
 const ProfileUpdatePage = () => {
   const [email, setEmail] = useState("");
@@ -52,8 +52,8 @@ const ProfileUpdatePage = () => {
 
     const updateUser = async () => {
       try {
-        await userUpdateApi(userId, userData);
-        dispatch(setUser(userData));
+        const res = await userUpdateApi(userId, userData);
+        dispatch(setUser(res));
         toast.success("Profile Update Successfully!");
       } catch (error) {
         console.error("Profile Update failed:", error);
