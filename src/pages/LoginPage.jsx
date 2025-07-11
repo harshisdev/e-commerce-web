@@ -70,6 +70,7 @@ const Login = () => {
         toast.error("Oops! credentials are incorrect.");
         setEmail("");
         setPassword("");
+        setTermsCondition(false);
       } finally {
         setLoading(false);
       }
@@ -163,7 +164,7 @@ const Login = () => {
                   type="checkbox"
                   className="form-check"
                   id="termcondition"
-                  value={termsCondition}
+                  checked={termsCondition}
                   onChange={(e) => setTermsCondition(e.target.checked)}
                   tabIndex={3}
                 />
@@ -227,7 +228,9 @@ const Login = () => {
             type="button"
             className="btn btn-danger"
             onClick={() => {
-              setTermsCondition(false);
+              if (!termsCondition) {
+                setTermsCondition(true);
+              }
               setTermModal(false);
             }}
           >

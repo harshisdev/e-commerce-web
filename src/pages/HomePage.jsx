@@ -16,6 +16,7 @@ import { GrUpdate } from "react-icons/gr";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useSelector } from "react-redux";
+import Loading from "../component/Loading";
 
 const ProductCard = ({ onAddToCart }) => {
   const navigate = useNavigate();
@@ -321,7 +322,7 @@ const ProductCard = ({ onAddToCart }) => {
   };
 
   return (
-    <div className="container minHeight">
+    <div className="container">
       <div className="row mt-4 justify-content-between">
         <div className="col-12">
           <h1 className="fs-5">Products</h1>
@@ -501,7 +502,7 @@ const ProductCard = ({ onAddToCart }) => {
           )}
         </div>
       ) : (
-        "loading..."
+        <Loading />
       )}
 
       <Modal
