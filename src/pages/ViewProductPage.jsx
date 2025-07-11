@@ -13,7 +13,7 @@ const ViewProductPage = () => {
     const fetchproductViewi = async () => {
       setLoading(true);
       try {
-        const data = await productViewiApi({ id });
+        const data = await productViewiApi(id);
         setProductView(data);
       } catch (error) {
         console.error("Failed to fetch categories:", error);

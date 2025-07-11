@@ -20,6 +20,8 @@ const Login = () => {
 
   useEffect(() => {
     const userProfileGet = async () => {
+      if (!userId) return;
+
       try {
         const res = await userProfileGetApi(userId);
         if (res) {

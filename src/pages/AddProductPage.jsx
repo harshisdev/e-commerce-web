@@ -85,12 +85,11 @@ const AddProductPage = () => {
     setLoading(true);
 
     try {
-      const accessToken = sessionStorage.getItem("accessToken");
       const productData = {
         ...form,
         price: parseFloat(form.price),
       };
-      await productListUpdateApi(productData, accessToken);
+      await productListUpdateApi(productData);
       setShowViewProduct(true);
       toast.success("Product added successfully!");
       setForm({

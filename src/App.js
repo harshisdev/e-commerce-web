@@ -11,7 +11,6 @@ import AddCategoryPage from "./pages/AddCategoryPage";
 import AddProductPage from "./pages/AddProductPage";
 import ViewProductPage from "./pages/ViewProductPage";
 import ProfileUpdatePage from "./pages/ProfileUpdatePage";
-import TermsAndConditions from "./pages/TermsAndConditionsPage";
 import PageNotFound from "./pages/PageNotFoundPage";
 
 const App = () => {

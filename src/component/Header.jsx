@@ -20,7 +20,6 @@ const Header = ({ cartCount }) => {
   useEffect(() => {
     const loginProfile = async () => {
       if (!accessToken) return;
-
       try {
         const data = await loginProfileApi(accessToken);
         setprofileData(data);
@@ -88,12 +87,11 @@ const Header = ({ cartCount }) => {
             )}
             {profileData && accessToken && (
               <div className="ms-2 d-flex align-items-center">
-                <div className="d-none d-sm-block">
-                  {truncateText(userName, 10)} (
-                  <span style={{ textTransform: "capitalize" }}>
-                    {userRole}
-                  </span>
-                  )
+                <div
+                  style={{ textTransform: "capitalize" }}
+                  className="d-none d-sm-block"
+                >
+                  {truncateText(userName, 10)} (<span>{userRole}</span>)
                 </div>
                 <div className="dropdown pe-3">
                   <div

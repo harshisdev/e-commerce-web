@@ -13,12 +13,8 @@ export const userUpdateApi = async (id, userData) => {
   return response.data;
 };
 
-export const userProfileGetApi = async (id, accessToken) => {
-  const response = await axiosClient.get(`/users/${id}`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+export const userProfileGetApi = async (id) => {
+  const response = await axiosClient.get(`/users/${id}`);
   return response.data;
 };
 
@@ -40,12 +36,8 @@ export const productListApi = async () => {
   const response = await axiosClient.get("/products");
   return response.data;
 };
-export const productListUpdateApi = async (productData, accessToken) => {
-  const response = await axiosClient.post("/products", productData, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+export const productListUpdateApi = async (productData) => {
+  const response = await axiosClient.post("/products", productData);
   return response.data;
 };
 
@@ -64,29 +56,28 @@ export const productCategoriUpdateApi = async (formData) => {
   return response.data;
 };
 
+export const categorytUpdateApi = async (categoryToUpdate, payload) => {
+  const response = await axiosClient.put(
+    `/categories/${categoryToUpdate}`,
+    payload
+  );
+  return response.data;
+};
+
 export const productCategoriDeleteApi = async (categoriestId) => {
   const response = await axiosClient.delete(`/categories/${categoriestId}`);
   return response.data;
 };
 
-export const productViewiApi = async ({ id }) => {
+export const productViewiApi = async (id) => {
   const response = await axiosClient.get(`/products/${id}`);
   return response.data;
 };
 
-export const productUpdateApi = async ({
-  showUpdateProductId,
-  payload,
-  accessToken,
-}) => {
+export const productUpdateApi = async (showUpdateProductId, payload) => {
   const response = await axiosClient.put(
     `/products/${showUpdateProductId}`,
-    payload,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
+    payload
   );
   return response.data;
 };
@@ -99,21 +90,4 @@ export const uploadImageApi = async (formData) => {
   });
 
   return res.data;
-};
-
-export const categorytUpdateApi = async ({
-  categoryToUpdate,
-  payload,
-  accessToken,
-}) => {
-  const response = await axiosClient.put(
-    `/categories/${categoryToUpdate}`,
-    payload,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
-  return response.data;
 };

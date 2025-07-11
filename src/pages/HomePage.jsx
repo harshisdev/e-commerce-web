@@ -117,22 +117,6 @@ const ProductCard = ({ onAddToCart }) => {
     const product = filteredProducts.find((p) => p.id === productId);
 
     if (quantity > 0 && product) {
-      const cartItem = { ...product, quantity };
-
-      // Retrieve existing cart
-      const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-
-      // Check if the product is already in cart
-      const existingIndex = existingCart.findIndex(
-        (item) => item.id === product.id
-      );
-      if (existingIndex !== -1) {
-        existingCart[existingIndex].quantity += quantity;
-      } else {
-        existingCart.push(cartItem);
-      }
-
-      localStorage.setItem("cart", JSON.stringify(existingCart));
       navigate("/cart");
     }
   };
@@ -265,11 +249,7 @@ const ProductCard = ({ onAddToCart }) => {
       categoryId: form.categoryId,
     };
     try {
-      await productUpdateApi({
-        showUpdateProductId,
-        payload,
-        accessToken,
-      });
+      await productUpdateApi(showUpdateProductId, payload);
       setShowUpdateModal(false);
       toast.success("Product updated successfully!");
       setProducts((prev) =>
@@ -323,7 +303,7 @@ const ProductCard = ({ onAddToCart }) => {
         name: formData.name,
         image: formData.image,
       };
-      await categorytUpdateApi({ categoryToUpdate, payload, accessToken });
+      await categorytUpdateApi(categoryToUpdate, payload);
 
       // Update the categories list in state
       setCategories((prev) =>
