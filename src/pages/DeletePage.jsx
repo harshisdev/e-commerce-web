@@ -85,7 +85,7 @@ const DeletePage = () => {
             style={{ width: "100%", maxWidth: "400px" }}
           >
             <h4 className="mb-3 text-center">Delete Account</h4>
-            {name && <p className="text-center text-primary">`Hey, {name}</p>}
+            {name && <p className="text-center text-primary">Hey, {name}</p>}
             <form onSubmit={handleDelete}>
               <div className="mb-3">
                 <label htmlFor="userId" className="form-label">

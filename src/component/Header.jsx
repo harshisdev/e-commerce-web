@@ -7,7 +7,7 @@ import { IoAddOutline } from "react-icons/io5";
 import { CiUser } from "react-icons/ci";
 import defaultUserImg from "../assets/images/default-user.png";
 import { useDispatch, useSelector } from "react-redux";
-import { userNameUpdate, userRoleUpdate } from "../app/slice/userSlice";
+import { logout, userNameUpdate, userRoleUpdate } from "../app/slice/userSlice";
 import { AiOutlineDelete } from "react-icons/ai";
 
 const Header = ({ cartCount }) => {
@@ -42,8 +42,10 @@ const Header = ({ cartCount }) => {
 
   const handleLogout = () => {
     toast.success("Logout successfully !");
+    setprofileData(null);
     sessionStorage.clear();
     localStorage.clear();
+    dispatch(logout());
     navigate("/");
   };
 
@@ -58,6 +60,12 @@ const Header = ({ cartCount }) => {
             E-Coumerce-{userRole === "admin" ? "Store" : "Web"}
           </div>
           <div className="col-auto d-flex align-items-center">
+            {console.log(
+              !profileData &&
+                !accessToken &&
+                location.pathname !== "/login" &&
+                location.pathname !== "/register"
+            )}
             {!profileData &&
               !accessToken &&
               location.pathname !== "/login" &&
@@ -154,14 +162,14 @@ const Header = ({ cartCount }) => {
                         <CiUser className="fs-5 me-1" /> Profile Update
                       </Link>
                     </li>
-                    <li className="bg-success">
+                    <li className="bg-success border-bottom">
                       <Link
                         className="ms-2 d-block py-2 text-white text-decoration-none"
                         to="/delete"
                         state={{ userId: profileData.id }}
                       >
                         <AiOutlineDelete className="me-2 fs-5" />
-                        Delete
+                        Delete Profile
                       </Link>
                     </li>
 
