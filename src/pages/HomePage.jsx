@@ -423,7 +423,8 @@ const ProductCard = ({ onAddToCart }) => {
                   >
                     <Link
                       className="bg-light rounded-pill d-flex align-items-center"
-                      to={`/view-product/${product.id}`}
+                      to={`/view-product`}
+                      state={{ productId: product.id }}
                     >
                       <IoEyeOutline className="fs-3 text-black" />
                     </Link>

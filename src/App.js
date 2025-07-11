@@ -46,7 +46,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/reset-password" element={<ForgotPasswordPage />} />
-        <Route path="/profile-update/:id" element={<ProfileUpdatePage />} />
+        <Route path="/profile-update" element={<ProfileUpdatePage />} />
         <Route path="/delete" element={<DeletePage />} />
         <Route
           path="/"
@@ -58,7 +58,7 @@ const App = () => {
             <CartPage cartItems={cartItems} onCartUpdate={setCartItems} />
           }
         />
-        <Route path="/view-product/:id" element={<ViewProductPage />} />
+        <Route path="/view-product" element={<ViewProductPage />} />
         <Route path="/add-category" element={<AddCategoryPage />} />
         <Route path="/add-product" element={<AddProductPage />} />
         <Route path="*" element={<PageNotFound />} />

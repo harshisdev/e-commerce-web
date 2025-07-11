@@ -54,7 +54,7 @@ const DeletePage = () => {
       }
     } catch (error) {
       console.error("Account deletion failed:", error);
-      toast.error("Your account is delete.");
+      toast.error("This user is not available.");
     } finally {
       setLoading(false);
     }

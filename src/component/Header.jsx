@@ -156,7 +156,8 @@ const Header = ({ cartCount }) => {
                     )}
                     <li className="bg-success border-bottom text-white">
                       <Link
-                        to={`/profile-update/${profileData.id}`}
+                        to={`/profile-update`}
+                        state={{ userId: profileData.id }}
                         className="ms-2 d-block py-2 text-white text-decoration-none"
                       >
                         <CiUser className="fs-5 me-1" /> Profile Update

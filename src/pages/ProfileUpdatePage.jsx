@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { userProfileGetApi, userUpdateApi } from "../action/productApi";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import BreadCrumb from "../component/BreadCrumb";
@@ -8,7 +8,6 @@ import { useDispatch } from "react-redux";
 import { userNameUpdate, userRoleUpdate } from "../app/slice/userSlice";
 
 const ProfileUpdatePage = () => {
-  const { id } = useParams();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [avatar, setAvatar] = useState("");
@@ -19,11 +18,13 @@ const ProfileUpdatePage = () => {
   const navigate = useNavigate();
   const accessToken = sessionStorage.getItem("accessToken");
   const dispatch = useDispatch();
+  const location = useLocation();
+  const userId = location.state?.userId;
 
   useEffect(() => {
     const getUserProfile = async () => {
       try {
-        const res = await userProfileGetApi(id);
+        const res = await userProfileGetApi(userId);
         setEmail(res.email || "");
         setName(res.name || "");
         setAvatar(res.avatar || "");
@@ -35,7 +36,7 @@ const ProfileUpdatePage = () => {
     };
 
     getUserProfile();
-  }, [id]);
+  }, [userId]);
 
   const handleUpdate = (e) => {
     e.preventDefault();
@@ -51,7 +52,7 @@ const ProfileUpdatePage = () => {
 
     const updateUser = async () => {
       try {
-        await userUpdateApi(id, userData);
+        await userUpdateApi(userId, userData);
         dispatch(userRoleUpdate(role));
         dispatch(userNameUpdate(name));
         toast.success("Profile Update Successfully!");

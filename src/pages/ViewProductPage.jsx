@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { productViewiApi } from "../action/productApi";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Slider from "react-slick";
 import BreadCrumb from "../component/BreadCrumb";
 
 const ViewProductPage = () => {
-  const { id } = useParams();
+  const location = useLocation();
+  const productId = location.state?.productId;
   const [productView, setProductView] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -13,7 +14,7 @@ const ViewProductPage = () => {
     const fetchproductViewi = async () => {
       setLoading(true);
       try {
-        const data = await productViewiApi(id);
+        const data = await productViewiApi(productId);
         setProductView(data);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
@@ -23,7 +24,7 @@ const ViewProductPage = () => {
     };
 
     fetchproductViewi();
-  }, [id]);
+  }, [productId]);
 
   const settings = {
     infinite: true,
