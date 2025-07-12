@@ -40,6 +40,26 @@ const ProfileUpdatePage = () => {
 
   const handleUpdate = (e) => {
     e.preventDefault();
+    if (!email) {
+      toast.error("Email is required.");
+      return;
+    }
+    if (!name) {
+      toast.error("Name is required.");
+      return;
+    }
+    if (!password) {
+      toast.error("Password is required.");
+      return;
+    }
+    if (!role) {
+      toast.error("Role is required.");
+      return;
+    }
+    if (!avatar) {
+      toast.error("Avatar is required.");
+      return;
+    }
     const userData = {
       email,
       name,
