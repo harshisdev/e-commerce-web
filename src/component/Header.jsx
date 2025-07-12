@@ -81,7 +81,7 @@ const Header = ({ cartCount }) => {
                   to="/cart"
                   className="btn btn-btn-outline-primary position-relative ms-3 p-0 border-0"
                 >
-                  <span className="fs-4"> 🛒</span>
+                  <span className="fs-5"> 🛒</span>
                   <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     {cartCount > 0 ? cartCount : ""}
                   </span>

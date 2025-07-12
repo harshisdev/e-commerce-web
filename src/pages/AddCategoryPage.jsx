@@ -4,31 +4,26 @@ import { toast } from "react-toastify";
 import { Button, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import BreadCrumb from "../component/BreadCrumb";
-import { useSelector } from "react-redux";
 
 const AddCategoryPage = () => {
   const [showViewCategory, setShowViewCategory] = useState(false);
+  const [name, setName] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+
   const accessToken = sessionStorage.getItem("accessToken");
-  const [formData, setFormData] = useState({
-    name: "",
-    image: "",
-  });
-
-  const allUserData = useSelector((state) => state.user.data);
-
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  useEffect(() => {
+    if (!accessToken) {
+      navigate("/");
+    }
+  }, [!accessToken]);
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
-
     if (!file) return;
 
-    // Validate file type
     const allowedTypes = ["image/jpeg", "image/png"];
     if (!allowedTypes.includes(file.type)) {
       toast.error("Only JPG and PNG images are allowed.");
@@ -39,34 +34,54 @@ const AddCategoryPage = () => {
     formData.append("file", file);
 
     try {
+      setIsUploading(true);
       const res = await uploadImageApi(formData);
-      const imageUrl = res.location;
-
-      setFormData((prev) => ({ ...prev, image: imageUrl }));
+      setImageUrl(res.location);
+      toast.success("Image uploaded successfully!");
     } catch (error) {
       console.error("Image upload failed:", error);
       toast.error("Image upload failed");
+    } finally {
+      setIsUploading(false);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!name) {
+      toast.error("Name is required.");
+      return;
+    }
+    if (!imageUrl) {
+      toast.error("Image is required.");
+      return;
+    }
+
+    const payload = {
+      name: name,
+      image: imageUrl,
+    };
+
     try {
-      await productCategoriUpdateApi(formData);
+      await productCategoriUpdateApi(payload);
       setShowViewCategory(true);
       toast.success("Category added successfully!");
-      setFormData({ name: "", image: "" });
+      setName("");
+      setImageUrl("");
     } catch (error) {
       console.error("Failed to add category:", error);
-      toast.error("Failed to add category");
+
+      if (
+        error?.response?.data?.code === "SQLITE_CONSTRAINT_UNIQUE" &&
+        error?.response?.data?.message?.includes("category.slug")
+      ) {
+        toast.error("A category with this name already exists.");
+      } else {
+        toast.error("Failed to add category");
+      }
     }
   };
-
-  useEffect(() => {
-    if (!accessToken && allUserData?.role !== "admin") {
-      navigate("/");
-    }
-  }, [!accessToken, allUserData?.role !== "admin"]);
 
   const breadcrumbItems = [
     { label: "Home", to: "/" },
@@ -80,8 +95,9 @@ const AddCategoryPage = () => {
           <BreadCrumb items={breadcrumbItems} />
         </div>
       </div>
+
       <div className="row justify-content-center w-100">
-        <div className="col-12 col-sm-6">
+        <div className="col-12 col-sm-6 mb-4">
           <form onSubmit={handleSubmit} className="p-4 border rounded">
             <div className="mb-3">
               <label className="mb-1">Name</label>
@@ -89,26 +105,24 @@ const AddCategoryPage = () => {
                 type="text"
                 name="name"
                 className="form-control"
-                value={formData.name}
-                onChange={handleChange}
-                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
 
             <div className="mb-3">
-              <div className="mb-3">
-                <label className="mb-1">Image URL</label>
-                <input
-                  type="text"
-                  name="image"
-                  className="form-control"
-                  value={formData.image}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              <label className="mb-1">Image URL</label>
+              <input
+                type="text"
+                name="image"
+                className="form-control"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+              />
             </div>
+
             <div className="mb-3">
+              <label className="mb-1">Upload Image</label>
               <input
                 type="file"
                 className="form-control"
@@ -117,9 +131,23 @@ const AddCategoryPage = () => {
               />
             </div>
 
+            {imageUrl && (
+              <div className="mb-3 text-center">
+                <img
+                  src={imageUrl}
+                  alt="Preview"
+                  style={{ maxWidth: "100%", height: "auto" }}
+                />
+              </div>
+            )}
+
             <div className="d-flex justify-content-center">
-              <button type="submit" className="btn btn-success">
-                Add Category
+              <button
+                type="submit"
+                className="btn btn-success"
+                disabled={isUploading}
+              >
+                {isUploading ? "Uploading..." : "Add Category"}
               </button>
             </div>
           </form>
@@ -137,7 +165,7 @@ const AddCategoryPage = () => {
           <Modal.Title>View Category</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Do you want to view category</p>
+          <p>Do you want to view the categories?</p>
         </Modal.Body>
         <Modal.Footer>
           <Button
