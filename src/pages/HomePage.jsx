@@ -561,7 +561,7 @@ const ProductCard = ({ onAddToCart }) => {
         >
           <Modal.Body>
             <div className="mb-3">
-              <label className="mb-1">Name</label>
+              <label className="mb-1">Name <sup className="text-danger">*</sup></label>
               <input
                 type="text"
                 name="name"
@@ -574,7 +574,7 @@ const ProductCard = ({ onAddToCart }) => {
               />
             </div>
             <div className="mb-3">
-              <label className="mb-1">Image URL</label>
+              <label className="mb-1">Image URL <sup className="text-danger">*</sup></label>
               <input
                 type="text"
                 name="image"
@@ -663,7 +663,7 @@ const ProductCard = ({ onAddToCart }) => {
         </Modal.Header>
         <Modal.Body>
           <div className="mb-3">
-            <label className="form-label">Title</label>
+            <label className="form-label">Title <sup className="text-danger">*</sup></label>
             <input
               type="text"
               name="title"
@@ -674,7 +674,7 @@ const ProductCard = ({ onAddToCart }) => {
             />
           </div>
           <div className="mb-3">
-            <label className="form-label">Price</label>
+            <label className="form-label">Price <sup className="text-danger">*</sup></label>
             <input
               type="number"
               name="price"
@@ -685,7 +685,7 @@ const ProductCard = ({ onAddToCart }) => {
             />
           </div>
           <div className="mb-3">
-            <label className="form-label">Description</label>
+            <label className="form-label">Description <sup className="text-danger">*</sup></label>
             <textarea
               name="description"
               value={form.description}
@@ -696,7 +696,7 @@ const ProductCard = ({ onAddToCart }) => {
             />
           </div>
           <div className="mb-3">
-            <label className="form-label">Images</label>
+            <label className="form-label">Images <sup className="text-danger">*</sup></label>
             {form.images.map((img, idx) => (
               <input
                 key={idx}

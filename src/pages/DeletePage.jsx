@@ -93,7 +93,7 @@ const DeletePage = () => {
             <form onSubmit={handleDelete}>
               <div className="mb-3">
                 <label htmlFor="userId" className="form-label">
-                  User ID
+                  User ID <sup className="text-danger">*</sup>
                 </label>
                 <input
                   type="number"

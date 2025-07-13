@@ -100,7 +100,7 @@ const AddCategoryPage = () => {
         <div className="col-12 col-sm-6 mb-4">
           <form onSubmit={handleSubmit} className="p-4 border rounded">
             <div className="mb-3">
-              <label className="mb-1">Name</label>
+              <label className="mb-1">Name <sup className="text-danger">*</sup></label>
               <input
                 type="text"
                 name="name"
@@ -111,7 +111,7 @@ const AddCategoryPage = () => {
             </div>
 
             <div className="mb-3">
-              <label className="mb-1">Image URL</label>
+              <label className="mb-1">Image URL <sup className="text-danger">*</sup></label>
               <input
                 type="text"
                 name="image"

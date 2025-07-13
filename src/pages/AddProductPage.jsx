@@ -14,39 +14,32 @@ import { useSelector } from "react-redux";
 
 const AddProductPage = () => {
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+  const [category, setCategory] = useState("");
+  const [title, setTitle] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [images, setImages] = useState([""]);
   const [categories, setCategories] = useState([]);
   const [showViewProduct, setShowViewProduct] = useState(false);
-  const fileInputRef = useRef(null);
-  const [form, setForm] = useState({
-    title: "",
-    price: "",
-    description: "",
-    categoryId: "",
-    images: [],
-  });
   const [loading, setLoading] = useState(false);
   const accessToken = sessionStorage.getItem("accessToken");
 
   const allUserData = useSelector((state) => state.user.data);
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
   const handleImageChange = (e, index) => {
-    const updatedImages = [...form.images];
+    const updatedImages = [...images];
     updatedImages[index] = e.target.value;
-    setForm({ ...form, images: updatedImages });
+    setImages(updatedImages);
   };
 
   const addImageField = () => {
-    setForm({ ...form, images: [...form.images, ""] });
+    setImages([...images, ""]);
   };
 
   const removeImageField = () => {
-    if (form.images.length > 1) {
-      const updatedImages = form.images.slice(0, -1);
-      setForm({ ...form, images: updatedImages });
+    if (images?.length > 1) {
+      setImages(images.slice(0, -1));
     }
   };
 
@@ -66,11 +59,7 @@ const AddProductPage = () => {
     try {
       const uploadRes = await uploadImageApi(formData);
       const imageUrl = uploadRes.location;
-
-      setForm((prev) => ({
-        ...prev,
-        images: [...prev.images, imageUrl],
-      }));
+      setImages((prev) => [...prev, imageUrl]);
       toast.success("Image uploaded successfully!");
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -83,23 +72,43 @@ const AddProductPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!category) {
+      toast.error("Category is required.");
+      return;
+    }
+    if (!title) {
+      toast.error("Title is required.");
+      return;
+    }
+    if (!price) {
+      toast.error("Price is required.");
+      return;
+    }
+    if (!description) {
+      toast.error("Description is required.");
+      return;
+    }
+    if (!images || images.length === 0 || !images[0]) {
+      toast.error("Image is required.");
+      return;
+    }
     setLoading(true);
-
     try {
       const productData = {
-        ...form,
-        price: parseFloat(form.price),
+        categoryId: category,
+        title: title,
+        price: price,
+        description: description,
+        images: images,
       };
       await productListUpdateApi(productData);
       setShowViewProduct(true);
       toast.success("Product added successfully!");
-      setForm({
-        title: "",
-        price: "",
-        description: "",
-        categoryId: "",
-        images: [""],
-      });
+      setCategory("");
+      setTitle("");
+      setPrice("");
+      setDescription("");
+      setImages([""]);
     } catch (error) {
       console.error("Error adding product:", error);
       toast.error("Failed to add product.");
@@ -141,15 +150,18 @@ const AddProductPage = () => {
       </div>
       <div className="row justify-content-center">
         <div className="col-12 col-md-6 mb-4">
-          <form onSubmit={handleSubmit} className="p-4 border rounded">
+          <form
+            onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
+            onSubmit={handleSubmit}
+            className="p-4 border rounded"
+          >
             <div className="mb-3">
-              <label className="form-label">Category</label>
+              <label className="form-label">Category <sup className="text-danger">*</sup></label>
               <select
                 name="categoryId"
-                value={form.categoryId}
-                onChange={handleChange}
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
                 className="form-control"
-                required
               >
                 <option value="">Select a category</option>
                 {categories.map((category) => (
@@ -161,61 +173,58 @@ const AddProductPage = () => {
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Title</label>
+              <label className="form-label">Title <sup className="text-danger">*</sup></label>
               <input
                 type="text"
                 name="title"
-                value={form.title}
-                onChange={handleChange}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 className="form-control"
-                required
               />
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Price</label>
+              <label className="form-label">Price <sup className="text-danger">*</sup></label>
               <input
                 type="number"
                 name="price"
-                value={form.price}
-                onChange={handleChange}
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
                 className="form-control"
-                required
               />
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Description</label>
+              <label className="form-label">Description <sup className="text-danger">*</sup></label>
               <textarea
                 name="description"
-                value={form.description}
-                onChange={handleChange}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 className="form-control"
                 rows="3"
-                required
               />
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Images</label>
+              <label className="form-label">Images <sup className="text-danger">*</sup></label>
               <br />
-              {form.images.map((img, idx) => (
-                <input
-                  key={idx}
-                  type="text"
-                  value={img}
-                  onChange={(e) => handleImageChange(e, idx)}
-                  className="form-control mb-2"
-                  placeholder={`Image URL #${idx + 1}`}
-                  required
-                />
+              {images?.map((img, idx) => (
+                <div key={idx} className="mb-2">
+                  <input
+                    type="text"
+                    value={img}
+                    onChange={(e) => handleImageChange(e, idx)}
+                    className="form-control mb-1"
+                  />
+                  {img && <img src={img} alt={`preview-${idx}`} height="60" />}
+                </div>
               ))}
 
               <button
                 type="button"
                 className="btn btn-sm btn-outline-danger me-4 mt-2"
                 onClick={removeImageField}
-                disabled={form.images.length <= 1}
+                disabled={images.length <= 1}
               >
                 <AiOutlineDelete className="me-2 fs-5" />
                 Remove URL

@@ -93,7 +93,7 @@ const Register = () => {
             <form onSubmit={handleRegister}>
               <div className="mb-3">
                 <label htmlFor="email" className="form-label">
-                  Email address
+                  Email <sup className="text-danger">*</sup>
                 </label>
                 <input
                   type="email"
@@ -108,7 +108,7 @@ const Register = () => {
 
               <div className="mb-3">
                 <label htmlFor="name" className="form-label">
-                  Name
+                  Name <sup className="text-danger">*</sup>
                 </label>
                 <input
                   type="text"
@@ -123,7 +123,7 @@ const Register = () => {
 
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">
-                  Password
+                  Password <sup className="text-danger">*</sup>
                 </label>
                 <div className="input-group">
                   <input
@@ -152,7 +152,7 @@ const Register = () => {
 
               <div className="mb-3">
                 <label htmlFor="role" className="form-label">
-                  Role
+                  Role <sup className="text-danger">*</sup>
                 </label>
                 <select
                   className="form-select"
@@ -170,7 +170,7 @@ const Register = () => {
 
               <div className="mb-3">
                 <label htmlFor="avatar" className="form-label">
-                  Avatar URL
+                  Avatar URL <sup className="text-danger">*</sup>
                 </label>
                 <input
                   type="url"

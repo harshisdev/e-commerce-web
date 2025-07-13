@@ -105,7 +105,7 @@ const ForgotPasswordPage = () => {
             <form onSubmit={handleForgot}>
               <div className="mb-3">
                 <label htmlFor="userId" className="form-label">
-                  User ID
+                  User ID <sup className="text-danger">*</sup>
                 </label>
                 <input
                   type="number"
@@ -142,7 +142,7 @@ const ForgotPasswordPage = () => {
 
                   <div className="mb-3">
                     <label htmlFor="newPassword" className="form-label">
-                      New Password
+                      New Password <sup className="text-danger">*</sup>
                     </label>
                     <div className="input-group">
                       <input

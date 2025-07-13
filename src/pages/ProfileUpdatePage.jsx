@@ -114,7 +114,7 @@ const ProfileUpdatePage = () => {
             <form onSubmit={handleUpdate}>
               <div className="mb-3">
                 <label htmlFor="email" className="form-label">
-                  Email address
+                  Email <sup className="text-danger">*</sup>
                 </label>
                 <input
                   type="email"
@@ -129,7 +129,7 @@ const ProfileUpdatePage = () => {
 
               <div className="mb-3">
                 <label htmlFor="name" className="form-label">
-                  Name
+                  Name <sup className="text-danger">*</sup>
                 </label>
                 <input
                   type="text"
@@ -144,7 +144,7 @@ const ProfileUpdatePage = () => {
 
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">
-                  Password
+                  Password <sup className="text-danger">*</sup>
                 </label>
                 <div className="input-group">
                   <input
@@ -170,7 +170,7 @@ const ProfileUpdatePage = () => {
 
               <div className="mb-3">
                 <label htmlFor="role" className="form-label">
-                  Role
+                  Role <sup className="text-danger">*</sup>
                 </label>
                 <select
                   className="form-select"
@@ -188,7 +188,7 @@ const ProfileUpdatePage = () => {
 
               <div className="mb-3">
                 <label htmlFor="avatar" className="form-label">
-                  Avatar URL
+                  Avatar URL <sup className="text-danger">*</sup>
                 </label>
                 <input
                   type="url"
