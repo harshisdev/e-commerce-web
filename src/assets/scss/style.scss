@@ -7,7 +7,7 @@ body {
   box-sizing: border-box;
 }
 .minHeight {
-  min-height: calc(100vh - 110px);
+  min-height: calc(100vh - 102px);
 }
 .card {
   overflow: hidden;
@@ -35,4 +35,8 @@ body {
 
 .dropdown-menu li a {
   cursor: pointer;
+}
+
+.breadcrumb{
+  margin-bottom: 0px;
 }

@@ -45,7 +45,7 @@ const ViewProductPage = () => {
   return (
     <div className="container minHeight">
       {!loading ? (
-        <div className="row mt-4 justify-content-center position-relative">
+        <div className="row pt-4 justify-content-center position-relative">
           <div className="col-12">
             <BreadCrumb items={breadcrumbItems} />
           </div>

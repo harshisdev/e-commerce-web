@@ -90,7 +90,7 @@ const AddCategoryPage = () => {
 
   return (
     <div className="container minHeight">
-      <div className="row my-4">
+      <div className="row py-3">
         <div className="col-12">
           <BreadCrumb items={breadcrumbItems} />
         </div>
@@ -144,7 +144,7 @@ const AddCategoryPage = () => {
             <div className="d-flex justify-content-center">
               <button
                 type="submit"
-                className="btn btn-success"
+                className="btn btn-outline-success px-3 rounded-5"
                 disabled={isUploading}
               >
                 {isUploading ? "Uploading..." : "Add Category"}

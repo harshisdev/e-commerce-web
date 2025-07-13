@@ -77,14 +77,14 @@ const Register = () => {
   ];
 
   return (
-    <div className="container minHeight mb-4">
-      <div className="row my-4">
+    <div className="container minHeight">
+      <div className="row py-3">
         <div className="col-12">
           <BreadCrumb items={breadcrumbItems} />
         </div>
       </div>
       <div className="row">
-        <div className="col-12 d-flex justify-content-center">
+        <div className="col-12 d-flex justify-content-center mb-4">
           <div
             className="card p-4 shadow-lg"
             style={{ width: "100%", maxWidth: "400px" }}

@@ -133,14 +133,14 @@ const AddProductPage = () => {
   ];
 
   return (
-    <div className="container mb-4">
-      <div className="row my-4">
+    <div className="container minHeight">
+      <div className="row py-3">
         <div className="col-12">
           <BreadCrumb items={breadcrumbItems} />
         </div>
       </div>
       <div className="row justify-content-center">
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-md-6 mb-4">
           <form onSubmit={handleSubmit} className="p-4 border rounded">
             <div className="mb-3">
               <label className="form-label">Category</label>
@@ -241,7 +241,7 @@ const AddProductPage = () => {
             <div className="d-flex justify-content-center">
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="btn btn-outline-success px-3 rounded-5"
                 disabled={loading || categories.length === 0}
               >
                 {loading ? "Submitting..." : "Add Product"}

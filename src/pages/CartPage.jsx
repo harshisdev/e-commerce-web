@@ -190,14 +190,14 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
           <div className="row my-4">
             <div className="col-auto">
               <button
-                className="btn btn-outline-success"
+                className="btn btn-outline-success px-3 rounded-5"
                 onClick={handleShopNow}
               >
                 <IoAddOutline className="me-1 fs-5" /> Add Product
               </button>
             </div>
             <div className="col d-flex justify-content-end">
-              <button className="btn btn-success" onClick={proceedToCheckout}>
+              <button className="btn btn-outline-success px-3 rounded-5" onClick={proceedToCheckout}>
                 <MdShoppingCartCheckout className="me-1 fs-5" /> Checkout
               </button>
             </div>

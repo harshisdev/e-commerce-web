@@ -320,8 +320,8 @@ const ProductCard = ({ onAddToCart }) => {
   };
 
   return (
-    <div className="container">
-      <div className="row mt-4 justify-content-between">
+    <div className="container minHeight">
+      <div className="row pt-4 justify-content-between">
         <div className="col-12">
           <h1 className="fs-5">Products</h1>
         </div>
@@ -528,14 +528,14 @@ const ProductCard = ({ onAddToCart }) => {
         <Modal.Footer>
           <Button
             type="button"
-            className="btn btn-secondary"
+            className="btn btn-secondary px-3 rounded-5"
             onClick={() => setShowDeleteProductModal(false)}
           >
             No
           </Button>
           <Button
             type="button"
-            className="btn btn-danger"
+            className="btn btn-danger px-3 rounded-5"
             onClick={() => delateProduct(showDeleteProductId)}
           >
             Yes, Delete
@@ -637,14 +637,14 @@ const ProductCard = ({ onAddToCart }) => {
         <Modal.Footer>
           <Button
             type="button"
-            className="btn btn-secondary"
+            className="btn btn-secondary px-3 rounded-5"
             onClick={() => setShowDeleteModal(false)}
           >
             No
           </Button>
           <Button
             type="button"
-            className="btn btn-danger"
+            className="btn btn-danger px-3 rounded-5"
             onClick={confirmDeleteCategory}
           >
             Yes, Delete
@@ -728,13 +728,13 @@ const ProductCard = ({ onAddToCart }) => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button
+          <button
             type="submit"
-            className="btn btn-success"
+            className="btn btn-outline-success px-3 rounded-5"
             onClick={handleSubmit}
           >
             Update Product
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
     </div>
