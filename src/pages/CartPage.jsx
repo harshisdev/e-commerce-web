@@ -92,7 +92,7 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
   ];
   return (
     <div className="container minHeight">
-      <div className="row my-4">
+      <div className="row py-4">
         <div className="col-6">
           <BreadCrumb items={breadcrumbItems} />
         </div>
