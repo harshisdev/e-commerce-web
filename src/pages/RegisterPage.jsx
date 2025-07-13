@@ -183,6 +183,16 @@ const Register = () => {
                 />
               </div>
 
+              {avatar && (
+                <div className="mb-3 text-center">
+                  <img
+                    src={avatar}
+                    alt="Preview"
+                    style={{ maxWidth: "100%", height: "auto" }}
+                  />
+                </div>
+              )}
+
               <div className="d-flex justify-content-center">
                 <button
                   type="submit"
