@@ -9,6 +9,11 @@ export const userRegisterApi = async (userData) => {
   return response.data;
 };
 
+export const userAvailableApi = async (payloademail) => {
+  const response = await axiosClient.post("/users/is-available", payloademail);
+  return response.data;
+};
+
 export const userUpdateApi = async (id, userData) => {
   const response = await axiosClient.put(`/users/${id}`, userData);
   return response.data;

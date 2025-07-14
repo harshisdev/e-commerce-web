@@ -23,7 +23,7 @@ import { useIdleTimer } from "react-idle-timer";
 import { useDispatch } from "react-redux";
 import { logout } from "./app/slice/userSlice";
 
-const INACTIVITY_LIMIT = 5 * 60 * 1000;
+const INACTIVITY_LIMIT = 10 * 60 * 1000;
 
 const App = () => {
   const [cartItems, setCartItems] = useState([]);

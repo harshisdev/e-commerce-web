@@ -1,5 +1,9 @@
 import { toast } from "react-toastify";
-import { loginUserApi, userProfileGetApi } from "../action/productApi";
+import {
+  loginUserApi,
+  userAvailableApi,
+  userProfileGetApi,
+} from "../action/productApi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
@@ -55,22 +59,34 @@ const Login = () => {
         email: email,
         password: password,
       };
+      const payloademail = {
+        email: email,
+      };
       try {
-        const data = await loginUserApi(payload);
-        if (data && data.access_token) {
-          const token = data.access_token;
-          sessionStorage.setItem("accessToken", token);
-          toast.success("Login Successfully!");
-          navigate("/");
-        } else {
-          toast.error("Login failed. No token received.");
+        const data = await userAvailableApi(payloademail);
+        if (!data?.isAvailable) {
+          try {
+            const data = await loginUserApi(payload);
+            if (data && data.access_token) {
+              const token = data.access_token;
+              sessionStorage.setItem("accessToken", token);
+              toast.success("Login Successfully!");
+              navigate("/");
+            } else {
+              toast.error("Login failed. No token received.");
+            }
+          } catch (error) {
+            console.error("Login failed:", error);
+            toast.error("Oops! credentials are incorrect.");
+            setEmail("");
+            setPassword("");
+            setTermsCondition(false);
+          } finally {
+            setLoading(false);
+          }
         }
       } catch (error) {
-        console.error("Login failed:", error);
-        toast.error("Oops! credentials are incorrect.");
-        setEmail("");
-        setPassword("");
-        setTermsCondition(false);
+        toast.error("User already login");
       } finally {
         setLoading(false);
       }
