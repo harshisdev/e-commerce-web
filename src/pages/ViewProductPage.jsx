@@ -3,6 +3,7 @@ import { productViewiApi } from "../action/productApi";
 import { useLocation, useParams } from "react-router-dom";
 import Slider from "react-slick";
 import BreadCrumb from "../component/BreadCrumb";
+import Loader from "../component/Loader";
 
 const ViewProductPage = () => {
   const location = useLocation();
@@ -91,7 +92,7 @@ const ViewProductPage = () => {
           )}
         </div>
       ) : (
-        "loading..."
+        <Loader width={"80px"} />
       )}
     </div>
   );
