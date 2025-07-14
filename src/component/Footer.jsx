@@ -8,7 +8,10 @@ const Footer = () => {
     <footer className="py-2 bg-black shadow">
       <div className="container">
         <div className="row">
-          <div className="col-12 text-center text-white">
+          <div
+            style={{ fontSize: "0.825rem" }}
+            className="col-12 text-center text-white"
+          >
             © {currentYear} E-commerce-
             {allUserData?.role === "admin" ? "Store" : "Web"}. All rights
             reserved by Harsh Kumar.

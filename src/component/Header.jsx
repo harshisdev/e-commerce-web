@@ -138,23 +138,13 @@ const Header = ({ cartCount }) => {
                         </li>
                       </>
                     )}
-                    <li className="bg-success border-bottom d-block d-sm-none py-2 text-white">
-                      <span className="ms-2">
-                        <CiUser className="fs-5 me-1" />{" "}
-                        {truncateText(allUserData?.name, 7)} (
-                        <span style={{ textTransform: "capitalize" }}>
-                          {allUserData?.role}
-                        </span>
-                        )
-                      </span>
-                    </li>
                     <li className="bg-success border-bottom text-white">
                       <Link
                         to={`/profile-update`}
                         state={{ userId: allUserData?.id }}
                         className="ms-2 d-block py-2 text-white text-decoration-none"
                       >
-                        <CiUser className="fs-5 me-1" /> Profile Update (
+                        <CiUser className="fs-5 me-1" /> View Profile (
                         {allUserData?.id})
                       </Link>
                     </li>

@@ -148,117 +148,125 @@ const AddProductPage = () => {
           <BreadCrumb items={breadcrumbItems} />
         </div>
       </div>
-      <div className="row justify-content-center">
-        <div className="col-12 col-md-6 mb-4">
-          <form
-            onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
-            onSubmit={handleSubmit}
-            className="p-4 border rounded"
-          >
-            <div className="mb-3">
-              <label className="form-label">Category <sup className="text-danger">*</sup></label>
-              <select
-                name="categoryId"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="form-control"
-              >
-                <option value="">Select a category</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Title <sup className="text-danger">*</sup></label>
-              <input
-                type="text"
-                name="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="form-control"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Price <sup className="text-danger">*</sup></label>
-              <input
-                type="number"
-                name="price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                className="form-control"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Description <sup className="text-danger">*</sup></label>
-              <textarea
-                name="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="form-control"
-                rows="3"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Images <sup className="text-danger">*</sup></label>
-              <br />
-              {images?.map((img, idx) => (
-                <div key={idx} className="mb-2">
-                  <input
-                    type="text"
-                    value={img}
-                    onChange={(e) => handleImageChange(e, idx)}
-                    className="form-control mb-1"
-                  />
-                  {img && <img src={img} alt={`preview-${idx}`} height="60" />}
-                </div>
+      <form
+        onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
+        onSubmit={handleSubmit}
+        className="p-4 border rounded mb-3"
+      >
+        <div className="row">
+          <div className="col-12 col-sm-6 col-md-4 mb-3">
+            <label className="form-label">
+              Category <sup className="text-danger">*</sup>
+            </label>
+            <select
+              name="categoryId"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="form-control"
+            >
+              <option value="">Select a category</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
               ))}
+            </select>
+          </div>
 
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-danger me-4 mt-2"
-                onClick={removeImageField}
-                disabled={images.length <= 1}
-              >
-                <AiOutlineDelete className="me-2 fs-5" />
-                Remove URL
-              </button>
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-success mt-2"
-                onClick={addImageField}
-              >
-                <IoAddOutline className="me-2 fs-5" />
-                Add URL
-              </button>
-            </div>
-            <div className="mb-3">
-              <input
-                type="file"
-                className="form-control"
-                accept="image/png, image/jpeg"
-                onChange={handleFileChange}
-                ref={fileInputRef}
-              />
-            </div>
-            <div className="d-flex justify-content-center">
-              <button
-                type="submit"
-                className="btn btn-outline-success px-3 rounded-5"
-                disabled={loading || categories.length === 0}
-              >
-                {loading ? "Submitting..." : "Add Product"}
-              </button>
-            </div>
-          </form>
+          <div className="col-12 col-sm-6 col-md-4 mb-3">
+            <label className="form-label">
+              Title <sup className="text-danger">*</sup>
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="form-control"
+            />
+          </div>
+
+          <div className="col-12 col-sm-6 col-md-4 mb-3">
+            <label className="form-label">
+              Price <sup className="text-danger">*</sup>
+            </label>
+            <input
+              type="number"
+              name="price"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className="form-control"
+            />
+          </div>
+
+          <div className="col-12 col-sm-6 col-md-4 mb-3">
+            <label className="form-label">
+              Description <sup className="text-danger">*</sup>
+            </label>
+            <textarea
+              name="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="form-control"
+              rows="3"
+            />
+          </div>
+
+          <div className="col-12 col-sm-6 col-md-4 mb-3">
+            <label className="form-label">
+              Images <sup className="text-danger">*</sup>
+            </label>
+            <br />
+            {images?.map((img, idx) => (
+              <div key={idx} className="mb-2">
+                <input
+                  type="text"
+                  value={img}
+                  onChange={(e) => handleImageChange(e, idx)}
+                  className="form-control mb-1"
+                />
+                {img && <img src={img} alt={`preview-${idx}`} height="60" />}
+              </div>
+            ))}
+
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-danger me-4 mt-2"
+              onClick={removeImageField}
+              disabled={images.length <= 1}
+            >
+              <AiOutlineDelete className="me-2 fs-5" />
+              Remove URL
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-success mt-2"
+              onClick={addImageField}
+            >
+              <IoAddOutline className="me-2 fs-5" />
+              Add URL
+            </button>
+          </div>
+          <div className="col-12 col-sm-6 col-md-4 mt-sm-4">
+            <input
+              type="file"
+              className="form-control mt-2"
+              accept="image/png, image/jpeg"
+              onChange={handleFileChange}
+              ref={fileInputRef}
+            />
+          </div>
+          <div className="d-flex justify-content-center mt-4 mt-sm-2">
+            <button
+              type="submit"
+              className="btn btn-outline-success px-3 rounded-5"
+              disabled={loading || categories.length === 0}
+            >
+              {loading ? "Submitting..." : "Add Product"}
+            </button>
+          </div>
         </div>
-      </div>
+      </form>
       <Modal
         show={showViewProduct}
         onHide={() => setShowViewProduct(false)}

@@ -13,7 +13,6 @@ import { IoAddOutline, IoEyeOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { GrUpdate } from "react-icons/gr";
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useSelector } from "react-redux";
 import Loader from "../component/Loader";
@@ -464,7 +463,7 @@ const ProductCard = ({ onAddToCart }) => {
                           </button>
                         </div>
                         <button
-                          className="btn btn-primary btn-sm"
+                          className="btn btn-outline-primary rounded-5 btn-sm"
                           onClick={() => handleAddToCart(product.id)}
                           disabled={!(productQuantities[product.id] > 0)}
                         >
@@ -472,7 +471,7 @@ const ProductCard = ({ onAddToCart }) => {
                         </button>
                         {showGotoCart[product.id] && (
                           <button
-                            className="btn btn-primary btn-sm"
+                            className="btn btn-outline-success rounded-5 btn-sm"
                             onClick={() => handleGoToCart(product.id)}
                           >
                             Go To Cart
@@ -526,20 +525,20 @@ const ProductCard = ({ onAddToCart }) => {
           <p className="mb-0">Are you sure you want to delete this Product?</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button
+          <button
             type="button"
-            className="btn btn-secondary px-3 rounded-5"
+            className="btn btn-outline-secondary px-3 rounded-5"
             onClick={() => setShowDeleteProductModal(false)}
           >
             No
-          </Button>
-          <Button
+          </button>
+          <button
             type="button"
-            className="btn btn-danger px-3 rounded-5"
+            className="btn btn-outline-danger px-3 rounded-5"
             onClick={() => delateProduct(showDeleteProductId)}
           >
             Yes, Delete
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
 
@@ -601,16 +600,16 @@ const ProductCard = ({ onAddToCart }) => {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button
+            <button
               type="button"
-              className="btn btn-secondary"
+              className="btn btn-outline-secondary"
               onClick={() => setshowUpdateCategoryModal(false)}
             >
               Cancel
-            </Button>
-            <Button type="submit" className="btn btn-primary">
+            </button>
+            <button type="submit" className="btn btn-outline-primary">
               Update Category
-            </Button>
+            </button>
           </Modal.Footer>
         </form>
       </Modal>
@@ -639,20 +638,20 @@ const ProductCard = ({ onAddToCart }) => {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button
+          <button
             type="button"
-            className="btn btn-secondary px-3 rounded-5"
+            className="btn btn-outline-secondary px-3 rounded-5"
             onClick={() => setShowDeleteModal(false)}
           >
             No
-          </Button>
-          <Button
+          </button>
+          <button
             type="button"
-            className="btn btn-danger px-3 rounded-5"
+            className="btn btn-outline-danger px-3 rounded-5"
             onClick={confirmDeleteCategory}
           >
             Yes, Delete
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
 

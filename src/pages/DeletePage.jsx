@@ -107,8 +107,8 @@ const DeletePage = () => {
               <div className="d-flex justify-content-center">
                 <button
                   type="submit"
-                  className="btn btn-danger px-3 rounded-5"
-                  disabled={loading}
+                  className="btn btn-outline-danger px-3 rounded-5"
+                  disabled={loading || !userId}
                 >
                   {loading ? (
                     <>

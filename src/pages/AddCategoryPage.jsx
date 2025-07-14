@@ -96,63 +96,65 @@ const AddCategoryPage = () => {
         </div>
       </div>
 
-      <div className="row justify-content-center w-100">
-        <div className="col-12 col-sm-6 mb-4">
-          <form onSubmit={handleSubmit} className="p-4 border rounded">
-            <div className="mb-3">
-              <label className="mb-1">Name <sup className="text-danger">*</sup></label>
-              <input
-                type="text"
-                name="name"
-                className="form-control"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+      <form onSubmit={handleSubmit} className="p-4 border rounded mb-3">
+        <div className="row">
+          <div className="col-12 col-sm-6 col-md-4 mb-3">
+            <label className="mb-1">
+              Name <sup className="text-danger">*</sup>
+            </label>
+            <input
+              type="text"
+              name="name"
+              className="form-control"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+
+          <div className="col-12 col-sm-6 col-md-4 mb-3">
+            <label className="mb-1">
+              Image URL <sup className="text-danger">*</sup>
+            </label>
+            <input
+              type="text"
+              name="image"
+              className="form-control"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+            />
+          </div>
+
+          <div className="col-12 col-sm-6 col-md-4 mb-3">
+            <label className="mb-1">Upload Image</label>
+            <input
+              type="file"
+              className="form-control"
+              accept="image/png, image/jpeg"
+              onChange={handleFileChange}
+            />
+          </div>
+
+          {imageUrl && (
+            <div className="col-12 col-sm-6 col-md-4 mb-3 text-center">
+              <img
+                src={imageUrl}
+                alt="Preview"
+                style={{ maxWidth: "100%", height: "auto" }}
               />
             </div>
+          )}
 
-            <div className="mb-3">
-              <label className="mb-1">Image URL <sup className="text-danger">*</sup></label>
-              <input
-                type="text"
-                name="image"
-                className="form-control"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="mb-1">Upload Image</label>
-              <input
-                type="file"
-                className="form-control"
-                accept="image/png, image/jpeg"
-                onChange={handleFileChange}
-              />
-            </div>
-
-            {imageUrl && (
-              <div className="mb-3 text-center">
-                <img
-                  src={imageUrl}
-                  alt="Preview"
-                  style={{ maxWidth: "100%", height: "auto" }}
-                />
-              </div>
-            )}
-
-            <div className="d-flex justify-content-center">
-              <button
-                type="submit"
-                className="btn btn-outline-success px-3 rounded-5"
-                disabled={isUploading}
-              >
-                {isUploading ? "Uploading..." : "Add Category"}
-              </button>
-            </div>
-          </form>
+          <div className="d-flex justify-content-center">
+            <button
+              type="submit"
+              className="btn btn-outline-success px-3 rounded-5"
+              disabled={isUploading}
+            >
+              {isUploading ? "Uploading..." : "Add Category"}
+            </button>
+          </div>
         </div>
-      </div>
+      </form>
 
       <Modal
         show={showViewCategory}
