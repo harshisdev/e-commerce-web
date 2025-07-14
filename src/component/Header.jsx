@@ -26,6 +26,8 @@ const Header = ({ cartCount }) => {
         const data = await loginProfileApi(accessToken);
         if (data) {
           dispatch(setUser(data));
+          const now = Date.now();
+          localStorage.setItem("lastActiveTime", now.toString());
         }
       } catch (error) {
         console.error("Profile fetch failed:", error);
@@ -45,7 +47,6 @@ const Header = ({ cartCount }) => {
     dispatch(logout());
     navigate("/");
   };
-
   const truncateText = (text, maxLength) =>
     text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 

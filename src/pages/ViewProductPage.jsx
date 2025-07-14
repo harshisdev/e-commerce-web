@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { productViewiApi } from "../action/productApi";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Slider from "react-slick";
 import BreadCrumb from "../component/BreadCrumb";
 import Loader from "../component/Loader";
