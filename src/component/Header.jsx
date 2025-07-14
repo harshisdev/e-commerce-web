@@ -54,7 +54,7 @@ const Header = ({ cartCount }) => {
       <div className="container">
         <div className="row align-items-center justify-content-between py-3">
           <div className="col-auto">
-            E-Coumerce-{allUserData?.role === "admin" ? "Store" : "Web"}
+            E-Commerce-{allUserData?.role === "admin" ? "Store" : "Web"}
           </div>
           <div className="col-auto d-flex align-items-center">
             {!allUserData &&

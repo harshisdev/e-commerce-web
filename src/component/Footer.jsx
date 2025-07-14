@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="container">
         <div className="row">
           <div className="col-12 text-center text-white">
-            © {currentYear} E-Commerce-
+            © {currentYear} E-commerce-
             {allUserData?.role === "admin" ? "Store" : "Web"}. All rights
             reserved by Harsh Kumar.
           </div>
