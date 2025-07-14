@@ -14,7 +14,7 @@ const Header = ({ cartCount }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const accessToken = sessionStorage.getItem("accessToken");
 
   const allUserData = useSelector((state) => state.user.data);
@@ -28,6 +28,7 @@ const Header = ({ cartCount }) => {
           dispatch(setUser(data));
           const now = Date.now();
           localStorage.setItem("lastActiveTime", now.toString());
+          localStorage.setItem("isLoggedIn", "true");
         }
       } catch (error) {
         console.error("Profile fetch failed:", error);

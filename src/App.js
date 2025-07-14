@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import Header from "./component/Header";
 import ProductCard from "./pages/HomePage";
 import CartPage from "./pages/CartPage";
@@ -50,6 +55,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    const loginStatus = localStorage.getItem("isLoggedIn");
     const lastActive = localStorage.getItem("lastActiveTime");
     const now = Date.now();
 
