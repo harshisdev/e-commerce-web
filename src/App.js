@@ -50,7 +50,6 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const loginStatus = localStorage.getItem("isLoggedIn");
     const lastActive = localStorage.getItem("lastActiveTime");
     const now = Date.now();
 
