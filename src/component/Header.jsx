@@ -11,7 +11,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { logout, setUser } from "../app/slice/userSlice";
 import { useIdleTimer } from "react-idle-timer";
 
-const INACTIVITY_LIMIT = 0.30 * 60 * 1000;
+const INACTIVITY_LIMIT = 10 * 60 * 1000;
 
 const Header = ({ cartCount }) => {
   const navigate = useNavigate();
