@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loginProfileApi } from "../action/productApi";
 import { toast } from "react-toastify";
@@ -9,15 +9,19 @@ import defaultUserImg from "../assets/images/default-user.png";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineDelete } from "react-icons/ai";
 import { logout, setUser } from "../app/slice/userSlice";
+import { useIdleTimer } from "react-idle-timer";
+
+const INACTIVITY_LIMIT = 0.2 * 60 * 1000;
 
 const Header = ({ cartCount }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const accessToken = sessionStorage.getItem("accessToken");
 
   const allUserData = useSelector((state) => state.user.data);
+
+  const loginStatus = localStorage.getItem("isLoggedIn");
 
   useEffect(() => {
     const loginProfile = async () => {
@@ -50,6 +54,46 @@ const Header = ({ cartCount }) => {
   };
   const truncateText = (text, maxLength) =>
     text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+
+  useIdleTimer({
+    timeout: INACTIVITY_LIMIT,
+    onIdle: () => {
+      const lastActive = localStorage.getItem("lastActiveTime");
+      const now = Date.now();
+
+      if (lastActive && now - parseInt(lastActive) >= INACTIVITY_LIMIT) {
+        handleLogout();
+      }
+    },
+    crossTab: true,
+    debounce: 500,
+    disabled: !loginStatus,
+  });
+
+  useEffect(() => {
+    if (loginStatus) {
+      const handleTabClose = () => {
+        localStorage.setItem("lastActiveTime", Date.now().toString());
+      };
+
+      window.addEventListener("beforeunload", handleTabClose);
+      return () => window.removeEventListener("beforeunload", handleTabClose);
+    }
+  }, []);
+
+  useEffect(() => {
+    const loginStatus = localStorage.getItem("isLoggedIn");
+    const lastActive = localStorage.getItem("lastActiveTime");
+    const now = Date.now();
+
+    if (loginStatus === "true") {
+      if (lastActive && now - parseInt(lastActive) < INACTIVITY_LIMIT) {
+        localStorage.setItem("lastActiveTime", now.toString());
+      } else {
+        handleLogout();
+      }
+    }
+  }, []);
 
   return (
     <header className="bg-light position-sticky top-0 z-2 shadow">
