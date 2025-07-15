@@ -11,7 +11,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { logout, setUser } from "../app/slice/userSlice";
 import { useIdleTimer } from "react-idle-timer";
 
-const INACTIVITY_LIMIT = 0.2 * 60 * 1000;
+const INACTIVITY_LIMIT = 0.30 * 60 * 1000;
 
 const Header = ({ cartCount }) => {
   const navigate = useNavigate();
@@ -20,7 +20,6 @@ const Header = ({ cartCount }) => {
   const accessToken = sessionStorage.getItem("accessToken");
 
   const allUserData = useSelector((state) => state.user.data);
-
   const loginStatus = localStorage.getItem("isLoggedIn");
 
   useEffect(() => {
@@ -52,8 +51,6 @@ const Header = ({ cartCount }) => {
     dispatch(logout());
     navigate("/");
   };
-  const truncateText = (text, maxLength) =>
-    text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 
   useIdleTimer({
     timeout: INACTIVITY_LIMIT,
@@ -94,6 +91,9 @@ const Header = ({ cartCount }) => {
       }
     }
   }, []);
+
+  const truncateText = (text, maxLength) =>
+    text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 
   return (
     <header className="bg-light position-sticky top-0 z-2 shadow">
@@ -204,13 +204,13 @@ const Header = ({ cartCount }) => {
                     </li>
 
                     <li className="bg-success">
-                      <Link
-                        className="ms-2 d-block py-2 text-white text-decoration-none"
+                      <button
+                        className="ms-2 d-block py-2 text-white text-decoration-none bg-transparent border-0 w-100 text-start"
                         onClick={handleLogout}
                       >
                         <MdOutlineLogout className="me-2 fs-5" />
                         Logout
-                      </Link>
+                      </button>
                     </li>
                   </ul>
                 </div>
