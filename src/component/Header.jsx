@@ -45,7 +45,6 @@ const Header = ({ cartCount }) => {
   }, [accessToken]);
 
   const handleLogout = () => {
-    toast.success("Logout successfully !");
     sessionStorage.clear();
     localStorage.clear();
     dispatch(logout());
@@ -108,15 +107,15 @@ const Header = ({ cartCount }) => {
               location.pathname !== "/login" &&
               location.pathname !== "/register" && (
                 <>
+                  <Link to="/login" className="text-decoration-none text-black">
+                    Login
+                  </Link>
+                  <span className="px-2 text-black">/</span>
                   <Link
                     to="/register"
                     className="text-black text-decoration-none"
                   >
                     Register
-                  </Link>
-                  <span className="px-2 text-black">/</span>
-                  <Link to="/login" className="text-decoration-none text-black">
-                    Login
                   </Link>
                 </>
               )}
