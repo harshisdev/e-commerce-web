@@ -197,7 +197,10 @@ const CartPage = ({ cartItems: initialCartItems, onCartUpdate }) => {
               </button>
             </div>
             <div className="col d-flex justify-content-end">
-              <button className="btn btn-outline-success px-3 rounded-5" onClick={proceedToCheckout}>
+              <button
+                className="btn btn-success px-3 rounded-5"
+                onClick={proceedToCheckout}
+              >
                 <MdShoppingCartCheckout className="me-1 fs-5" /> Checkout
               </button>
             </div>

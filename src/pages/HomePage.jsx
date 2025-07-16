@@ -423,7 +423,8 @@ const ProductCard = ({ onAddToCart }) => {
                     }}
                   >
                     <Link
-                      className="bg-light rounded-pill d-flex align-items-center"
+                      style={{ width: "35px", height: "35px" }}
+                      className="bg-light rounded-pill d-flex align-items-center justify-content-center"
                       to={`/view-product`}
                       state={{ productId: product.id }}
                     >
@@ -484,14 +485,20 @@ const ProductCard = ({ onAddToCart }) => {
                 {allUserData?.role === "admin" && (
                   <>
                     <div
-                      className="bg-light rounded-pill d-flex align-items-center product-view"
+                      style={{ width: "35px", height: "35px" }}
+                      className="bg-light rounded-pill d-flex align-items-center justify-content-center product-view"
                       onClick={() => delateProductModal(product.id)}
                     >
                       <AiOutlineDelete className="fs-2 text-danger p-1" />
                     </div>
                     <div
-                      className="bg-light rounded-pill d-flex align-items-center product-view"
-                      style={{ left: "20px", right: "unset" }}
+                      style={{
+                        width: "35px",
+                        height: "35px",
+                        left: "20px",
+                        right: "unset",
+                      }}
+                      className="bg-light rounded-pill d-flex align-items-center justify-content-center product-view"
                       onClick={() => productUpdateModal(product.id)}
                     >
                       <GrUpdate className="fs-2 text-success p-1" />
